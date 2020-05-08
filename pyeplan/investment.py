@@ -5,6 +5,25 @@ import os
 class invsys:
 
     def __init__(self,folder,dshed_cost=1000000,rshed_cost=500,vmin=0.8,vmax=1.2,sbase=100,ref_bus=0):
+        """Initialise the investment problem.
+
+        :param str folder: The input directory for the data
+        :param float dshed_cost: ???
+        :param float rshed_cost: ???
+        :param float vmin: ???
+        :param float vmax: ???
+        :param float sbase: ???
+        :param int ref_bus: ???
+        
+        :returns: ???
+        :rtype: int
+
+        :Example:
+
+        >>> import pyeplan
+        >>> sys_inv = pyeplan.invsys("3bus_inv")
+
+        """
 
         self.cgen = pd.read_csv(folder+os.sep+'cgen_dist.csv')
         self.egen = pd.read_csv(folder+os.sep+'egen_dist.csv')
@@ -42,6 +61,22 @@ class invsys:
        
 
     def solve(self,solver='cbc',network=True,commit=True,outdir='results'):
+        """Solve the investment problem.
+
+        :param str solver: the solver to be used. Default is 'cbc'
+        :param bool network: ???
+        :param bool commit: ???
+        :param str outdir: The output directory for the results
+        :returns: ???
+        :rtype: int
+
+        :Example:
+
+        >>> import pyeplan
+        >>> sys_inv = pyeplan.invsys("3bus_inv")
+        >>> sys_inv.solve(outdir='res_inv')
+
+        """
         
         #Define the Model
         m = pe.ConcreteModel()

@@ -4,12 +4,12 @@
 
 __name__ = "pyeplan"
 __version__ = '0.0.1'
-__author__ = "Shahab Dehghan"
+__author__ = "Shahab Dehghan and Petros Aristidou"
 __copyright__ = ""
 __license__ = "GPL-3.0"
-__maintainer__ = ""
+__maintainer__ = "s.dehghan@ieee.org"
 __email__ = "s.dehghan@ieee.org"
-__url__ = "https://github.com/shahabdehghan/PyEPlan"
+__url__ = "https://apetros.github.io/pyeplan/"
 __status__ = "3 - Alpha"
 
 

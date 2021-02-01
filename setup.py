@@ -23,7 +23,7 @@ setup(
     author_email=__email__,
     url=__url__,
     keywords=['Operation', 'Planning', 'Microgrids'],
-    license='GPL-3.0',
+    license='Apache License 2.0',
     long_description=read_file('README.rst'),
     long_description_content_type='text/x-rst',
     packages=find_packages(),
@@ -32,7 +32,7 @@ setup(
         "Development Status :: " + __status__,
         "Intended Audience :: Developers",
         "Environment :: Console",
-        "License :: Other/Proprietary License",
+        "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3"
     ]
 )

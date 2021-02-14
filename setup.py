@@ -24,7 +24,7 @@ setup(
     url=__url__,
     keywords=['Operation', 'Planning', 'Microgrids'],
     license='Apache License 2.0',
-    long_description=read_file('README.rst'),
+    long_description=read_file('README.md'),
     long_description_content_type='text/x-rst',
     packages=find_packages(),
     install_requires=install_requires, 

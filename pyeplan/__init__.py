@@ -4,12 +4,12 @@
 
 __name__ = "pyeplan"
 __version__ = '0.3'
-__author__ = "Shahab Dehghan and Petros Aristidou"
-__copyright__ = ""
+__author__ = u'2021 Shahab Dehghan (ICL), Agnes Nakiganda (UoL), Petros Aristidou (CUT)'
+__copyright__ = u'2021 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
 __license__ ='Apache License 2.0',
 __maintainer__ = "s.dehghan@ieee.org"
 __email__ = "s.dehghan@ieee.org"
-__url__ = "https://apetros.github.io/pyeplan/"
+__url__ = "https://pyeplan.readthedocs.io/"
 __status__ = "3 - Alpha"
 
 

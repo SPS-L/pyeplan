@@ -25,7 +25,7 @@ setup(
     keywords=['Operation', 'Planning', 'Microgrids'],
     license='Apache License 2.0',
     long_description=read_file('README.md'),
-    long_description_content_type='text/x-rst',
+    long_description_content_type='text/markdown',
     packages=find_packages(),
     install_requires=install_requires, 
     classifiers=[

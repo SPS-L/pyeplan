@@ -13,9 +13,9 @@ Please use the following BibTeX: ::
    }
 
 
-If you want to cite a specific PyPSA version, each release of PyPSA is
+If you want to cite a specific PyEPLAN version, each release of PyEPLAN is
 stored on `Zenodo <https://zenodo.org/>`_ with a release-specific DOI.
-The release-specific DOIs can be found linked from the overall PyPSA
+The release-specific DOIs can be found linked from the overall PyEPLAN
 Zenodo DOI:
 
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3894705.svg

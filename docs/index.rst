@@ -7,10 +7,6 @@ PyEPLAN: A Python-based Energy Planning tool
     :target: https://pypi.python.org/pypi/pyeplan
     :alt: PyPI version
 
-.. image:: https://readthedocs.org/projects/pyeplan/badge/?version=latest
-    :target: https://pyeplan.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
-
 .. image:: https://img.shields.io/pypi/l/pyeplan.svg
     :target: License
 

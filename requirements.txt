@@ -1,9 +1,3 @@
 # These packages are required for PyEPLAN's base functionality, installing those is sufficient to start playing
 pandas
 pyomo
-# There are many solvers available out there (check Pyomo's website for the supported)
-# But glpk is enough to get started and available through pip and conda
-glpk
-# These packages are used in examples or for testing, they can be omitted if necessary
-nose>=1.3.7
-pep8

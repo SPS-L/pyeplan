@@ -1,22 +1,20 @@
 import pandas as pd
 import pyomo.environ as pe
 import os
+import shutil 
 
 class invsys:
 
-    def __init__(self,folder,dshed_cost=1000000,rshed_cost=500,vmin=0.8,vmax=1.2,sbase=100,ref_bus=0):
+    def __init__(self,inp_folder='',dshed_cost=1000000,rshed_cost=500,vmin=0.8,vmax=1.2,sbase=100,ref_bus=0):
         """Initialise the investment problem.
 
-        :param str folder: The input directory for the data
-        :param float dshed_cost: ???
-        :param float rshed_cost: ???
-        :param float vmin: ???
-        :param float vmax: ???
-        :param float sbase: ???
-        :param int ref_bus: ???
-        
-        :returns: ???
-        :rtype: int
+        :param str inp_folder: The input directory for the data. It expects to find several CSV files detailing the system input data (Default current folder)
+        :param float dshed_cost: Demand Shedding Price (Default 1000000)
+        :param float rshed_cost: Renewable Shedding Price (Default 500)
+        :param float vmin: Minimum node voltage (Default 0.8)
+        :param float vmax: Maximum node voltage (Default 1.2)
+        :param float sbase: Base Apparent Power (default 100 MVA)
+        :param int ref_bus: Reference node (Default 0)
 
         :Example:
 
@@ -25,20 +23,20 @@ class invsys:
 
         """
 
-        self.cgen = pd.read_csv(folder+os.sep+'cgen_dist.csv')
-        self.egen = pd.read_csv(folder+os.sep+'egen_dist.csv')
+        self.cgen = pd.read_csv(inp_folder+os.sep+'cgen_dist.csv')
+        self.egen = pd.read_csv(inp_folder+os.sep+'egen_dist.csv')
         
-        self.cren = pd.read_csv(folder+os.sep+'cren_dist.csv')
-        self.eren = pd.read_csv(folder+os.sep+'eren_dist.csv')
+        self.cren = pd.read_csv(inp_folder+os.sep+'cren_dist.csv')
+        self.eren = pd.read_csv(inp_folder+os.sep+'eren_dist.csv')
         
-        self.clin = pd.read_csv(folder+os.sep+'elin_dist.csv')
-        self.elin = pd.read_csv(folder+os.sep+'elin_dist.csv')
+        self.clin = pd.read_csv(inp_folder+os.sep+'elin_dist.csv')
+        self.elin = pd.read_csv(inp_folder+os.sep+'elin_dist.csv')
         
-        self.pdem = pd.read_csv(folder+os.sep+'pdem_dist.csv')
-        self.qdem = pd.read_csv(folder+os.sep+'qdem_dist.csv')
+        self.pdem = pd.read_csv(inp_folder+os.sep+'pdem_dist.csv')
+        self.qdem = pd.read_csv(inp_folder+os.sep+'qdem_dist.csv')
         
-        self.pren = pd.read_csv(folder+os.sep+'pren_dist.csv')
-        self.qren = pd.read_csv(folder+os.sep+'qren_dist.csv')
+        self.pren = pd.read_csv(inp_folder+os.sep+'pren_dist.csv')
+        self.qren = pd.read_csv(inp_folder+os.sep+'qren_dist.csv')
         
         
         self.ncg = len(self.cgen)
@@ -53,20 +51,21 @@ class invsys:
         self.nbb = self.pdem.shape[1]
         self.ntt = self.pdem.shape[0]
         
-        self.cds = dshed_cost    #Demand Shedding Price
-        self.crs = rshed_cost    #Renewable Shedding Price
-        self.sb = sbase          #Base Apparent Power 
+        self.cds = dshed_cost    
+        self.crs = rshed_cost    
+        self.sb = sbase          
         self.vmin = vmin   
         self.vmax = vmax
+        self.inp_folder = inp_folder
        
 
-    def solve(self,solver='cbc',network=True,commit=True,outdir='results'):
+    def solve(self,solver='cbc',network=True,commit=True):
         """Solve the investment problem.
 
-        :param str solver: the solver to be used. Default is 'cbc'
-        :param bool network: ???
+        :param str solver: the solver to be used (Default is 'cbc')
+        :param bool network: Include the network constraints
         :param bool commit: ???
-        :param str outdir: The output directory for the results
+
         :returns: ???
         :rtype: int
 
@@ -77,7 +76,7 @@ class invsys:
         >>> sys_inv.solve(outdir='res_inv')
 
         """
-        
+              
         #Define the Model
         m = pe.ConcreteModel()
         
@@ -410,9 +409,11 @@ class invsys:
         self.pel_output = pyomo2dfopr(m.pel,m.cl,m.tt).T
         self.qel_output = pyomo2dfopr(m.qel,m.cl,m.tt).T
 
-        # Check if output folder exists
-        if not os.path.exists(outdir):
-            os.makedirs(outdir)
+        # Setup the results folder
+        outdir = self.inp_folder + os.sep + 'results'
+        if os.path.exists(outdir):
+            shutil.rmtree(outdir) 
+        os.makedirs(outdir)
         
         self.xg_output.to_csv(outdir+os.sep+'investment_conventional.csv',index=False)
         self.xr_output.to_csv(outdir+os.sep+'investment_renewable.csv',index=False)

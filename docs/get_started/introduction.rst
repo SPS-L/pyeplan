@@ -7,7 +7,7 @@ Functionality
 
 **PyEPLAN can calculate:**
 
-* 
+* Planning of Mini-grids...
 
 **It has models for:**
 

@@ -66,3 +66,8 @@ Documentation
    help_ref/api_reference
    help_ref/citing
    help_ref/users
+   
+.. image:: img/gcrf.jpg
+    :width: 200px
+    :align: center
+    :alt: alternate text

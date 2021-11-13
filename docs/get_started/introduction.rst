@@ -4,6 +4,9 @@
 
 **PyEPLAN** is an open-source **Py**-thon-based **E**-nergy **Plan**-ning tool for design and operation of optimised microgrid networks.
 
+.. image:: PyEPLAN_architecture.png
+   
+
 Functionality
 =============
 

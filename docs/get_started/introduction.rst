@@ -25,13 +25,13 @@ The Feeder Routing module finds the least cost network design given the geograph
 
 **Investment Planning**
 
-This module aims to minimise both investment costs during a long-term planning horizon (i.e., from one year to several years) under both investment and operation related techno-economic constraints.
+This module aims to minimise both investment costs during a long-term planning horizon (i.e., from one year to several years) under both investment and operation related techno-economic constraints. Capabilities include optimal technology sizing, sitting, capital and operation costs predictions, on-grid and off-grid modelling and uncertainity handling.
 
 Both the investment/operation planning module may require network characteristics (i.e., candidate/existing lines) as well as long-term/short-term estimated/forecasted load demands and power generations of RESs to obtain the optimal solution. The former can be user defined or obtained from the Feeder Routing module, and the latter can as well be user defined or obtained from the Data Processor module.
 
 **Operation Planning**
 
-This module aims to minimise operation costs during a short-term planning horizon (i.e., one day, hourly) under operation related techno-economic constraints. This module can be used independently or synchronously with the investment planning module.
+This module aims to minimise operation costs during a short-term planning horizon (i.e., one day, hourly) under operation related techno-economic constraints. This module can be used independently or synchronously with the investment planning module. Capabilities include adequacy analysis on-grid and off-grid, security analysis, and operation costs analysis.
 
 What PyEPLAN uses under the hood
 ================================
@@ -48,15 +48,15 @@ It depends heavily on the following Python packages:
 Other comparable software
 =========================
 
-* ...
-* ...
+* HOMER Energy
+* RETScreen
 
 
 
 Target user group
 =================
 
-PyEPLAN is intended for researchers, planners ...
+PyEPLAN is a tool intended for researchers, planners and students aiming at the creation and operation of cost-optimised resilient and sustainable microgrid networks.
 
 
 

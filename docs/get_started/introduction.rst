@@ -2,15 +2,21 @@
  Introduction
 ##########################################
 
-**PyEPLAN** is an open-source **Py**-thon-based **E**-nergy **Plan**-ning tool for design and operation of optimised microgrid networks.
+**PyEPLAN** is an open-source **Py**-thon-based **E**-nergy **Plan**-ning tool for design and operation of optimised microgrid networks. It supports functions ranging from renewable generation profile creation, network layout design to optimization of design and operation costs for microgrids packaged in four modules. Used indepently and/or jointly, the different packages provide the user with detailed analysis of short and long-term costs and benefits of different generation resources and impacts of their characteristics on system operation. The tool is customizable allowing users to neglect or input desired network characteristics, choose from a pool of generation sources both renewable and non-renewable, etc.
 
-.. image:: PyEPLAN_architecture.png
-   
+The initial development of the tool was funded under the UKRI GCRF project `CRESUM-HYRES <https://cera.leeds.ac.uk/cresum-hyres/>`_ at the `University of Leeds <https://leeds.ac.uk/>`_, but is now supported and co-developed by people in different universities (such as `CUT <https://sps.cut.ac.cy>`_, `ICL <https://www.imperial.ac.uk/>`_).
+
+In the next sections detailed information on fuctionality of each supported module, installation and usage is provided.
+
+
+     
 
 Functionality
 =============
 
 The functions available in the PyEPLAN are packaged into for key modules that can be utilised independently or simultaneously:
+
+.. image:: PyEPLAN_architecture.png
 
 **Data Processor**
 
@@ -32,6 +38,8 @@ Both the investment/operation planning module may require network characteristic
 **Operation Planning**
 
 This module aims to minimise operation costs during a short-term planning horizon (i.e., one day, hourly) under operation related techno-economic constraints. This module can be used independently or synchronously with the investment planning module. Capabilities include adequacy analysis on-grid and off-grid, security analysis, and operation costs analysis.
+
+Since both investment and operation planning modules include various optimisation problems, the open-source, Python-based, optimisation modelling module `Pyomo <http://www.pyomo.org/>`_ is used with diverse abilities in formulating, solving, and analysing optimisation problems. Additionally, PyEPLAN can utilise a broad range of solvers both open-source and commercial as supported by Pyomo, to obtain the optimal solution in both investment and operation planning modules.
 
 What PyEPLAN uses under the hood
 ================================

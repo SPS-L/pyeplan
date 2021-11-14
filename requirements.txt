@@ -1,3 +1,10 @@
 # These packages are required for PyEPLAN's base functionality, installing those is sufficient to start playing
-pandas
-pyomo
+pandas==1.3.4
+pyomo==6.1.2
+networkx==2.6.3
+mplleaflet==0.0.5
+matplotlib==3.3.0
+timezonefinder==5.2.0
+scikit-learn==1.0.0
+glpk==4.65
+openpyxl==3.0.9

@@ -1,0 +1,35 @@
+package:
+    name: pyeplan
+    version: '0.4'
+source:
+    path: ../pyeplan
+
+build:
+    noarch: generic
+
+requirements:
+    build:
+        - pandas
+        - pyomo
+        - networkx
+        - mplleaflet
+        - matplotlib
+        - timezonefinder
+        - scikit-learn-intelex
+    run:
+        - python
+        - pandas
+        - pyomo
+        - networkx
+        - mplleaflet
+        - matplotlib
+        - timezonefinder
+        - scikit-learn-intelex
+        - coincbc
+        - glpk
+
+about:
+    home: https://pyeplan.sps-lab.org
+    license: Apache Software License
+    license_file: LICENSE.rst
+    summary: Python library for planning and operation of resilient microgrids.

@@ -128,7 +128,7 @@ html_theme = 'sphinx_rtd_theme'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    'canonical_url': 'https://sps.cut.ac.cy/project/pyeplan/',
+    'canonical_url': 'https://pyeplan.sps-lab.org',
     'display_version': True,
     'sticky_navigation': True,
     #'style_nav_header_background': '#009682',

@@ -11,7 +11,7 @@ import os
 def read_file(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-install_requires = ['pandas','pyomo']
+required = ['pandas', 'pyomo', 'networkx', 'mplleaflet', 'matplotlib==3.3.0', 'timezonefinder', 'scikit-learn==1.0.0', 'openpyxl', 'glpk']
 
 from pyeplan import __version__, __author__, __email__, __status__, __url__, __name__
 
@@ -27,7 +27,7 @@ setup(
     long_description=read_file('README.rst'),
     long_description_content_type='text/x-rst',
     packages=find_packages(),
-    install_requires=install_requires, 
+    install_requires=required, 
     classifiers=[
         "Development Status :: " + __status__,
         "Intended Audience :: Developers",

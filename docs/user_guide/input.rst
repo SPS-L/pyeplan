@@ -2,8 +2,11 @@
  Input data
 ###########
 
--  **CSV File Name: cbat_dist** **characteristic of candidate battery
-   units**
+.. role::  raw-html(raw)
+    :format: html
+
+CSV File Name: cbat_dist :raw-html:`&rarr;` characteristic of candidate battery units
+*************************************************************************************
 
 **Columns:**
 
@@ -40,7 +43,8 @@ qmax: Maximum limit of reactive power production for each battery unit
 qmin: Minimum limit of reactive power production for each battery unit
 [kVAr]
 
--  **CSV File Name: cblt_dist Characteristic of different cables**
+CSV File Name: cblt_dist :raw-html:`&rarr;` Characteristic of different cables
+******************************************************************************
 
 **Columns:**
 
@@ -127,8 +131,8 @@ z7: Impedance (3 or 4 cables, three-phase AC, cables spaced, flat)
 i7: Rated current (3 or 4 cables, three-phase AC, cables spaced, flat)
 [A]
 
--  **CSV File** Name\ **: cgen_dist** **Characteristic of candidate
-   dispatchable units**
+CSV File Name\: cgen_dist :raw-html:`&rarr;` Characteristic of candidate dispatchable units
+*******************************************************************************************
 
 **Columns:**
 
@@ -155,7 +159,8 @@ qmax: Maximum limit of reactive power production for each battery unit
 qmin: Minimum limit of reactive power production for each battery unit
 [kVAr]
 
--  **CSV File Name: clin_dist** **Characteristic of candidate lines**
+CSV File Name: clin_dist :raw-html:`&rarr;` Characteristic of candidate lines
+*****************************************************************************
 
 **Columns:**
 
@@ -182,8 +187,8 @@ pmax: Inner approximation for maximum active power [kW]
 
 qmax: Inner approximation for maximum active power [kVAr]
 
--  **CSV File Name: csol_dist** **Characteristic of candidate solar
-   units**
+CSV File Name: csol_dist :raw-html:`&rarr;` Characteristic of candidate solar units
+***********************************************************************************
 
 **Columns:**
 
@@ -210,8 +215,8 @@ qmax: Maximum limit of reactive power production for each battery unit
 qmin: Minimum limit of reactive power production for each battery unit
 [kVAr]
 
--  **CSV File Name: csol_dist** **Characteristic of candidate solar
-   units**
+CSV File Name: csol_dist :raw-html:`&rarr;` Characteristic of candidate solar units
+***********************************************************************************
 
 **Columns:**
 
@@ -238,9 +243,8 @@ qmax: Maximum limit of reactive power production for each battery unit
 qmin: Minimum limit of reactive power production for each battery unit
 [kW]
 
--  **CSV File Name: cwin_dist Characteristic of candidate wind units**
-
-**Columns:**
+CSV File Name: cwin_dist :raw-html:`&rarr;` Characteristic of candidate wind units Columns
+******************************************************************************************
 
 +------+-------+--------+--------+-------+--------+-------+--------+
 | bus  | icost | ocost  | scost  | pmin  | pmax   | qmin  | qmax   |
@@ -265,8 +269,7 @@ qmax: Maximum limit of reactive power production for each battery unit
 qmin: Minimum limit of reactive power production for each battery unit
 [kVAr]
 
--  **CSV File Name: dtim_dist Duration time of each representative day
-   obtained by clustering techniques**
+CSV File Name: dtim_dist :raw-html:`&rarr;` Duration time of each representative day obtained by clustering techniques
 
 **Columns:**
 
@@ -278,8 +281,8 @@ qmin: Minimum limit of reactive power production for each battery unit
 dt: Duration time of each representative day obtained by clustering
 techniques [h]
 
--  **CSV File Name: egen_dist Characteristic of existing dispatchable
-   units**
+CSV File Name: egen_dist :raw-html:`&rarr;` Characteristic of existing dispatchable units
+*****************************************************************************************
 
 **Columns:**
 
@@ -304,7 +307,8 @@ qmax: Maximum limit of reactive power production for each battery unit
 qmin: Minimum limit of reactive power production for each battery unit
 [kVAr]
 
--  **CSV File Name: elin_dist Characteristic of existing lines**
+CSV File Name: elin_dist :raw-html:`&rarr;` Characteristic of existing lines
+****************************************************************************
 
 **Columns:**
 
@@ -331,8 +335,7 @@ pmax: Inner approximation for maximum active power [kW]
 
 qmax: Inner approximation for maximum active power [kVAr]
 
--  **CSV File Name: esol_dist** **Characteristic of existing solar
-   units**
+CSV File Name: esol_dist :raw-html:`&rarr;` Characteristic of existing solar units
 
 **Columns:**
 
@@ -359,7 +362,7 @@ qmax: Maximum limit of reactive power production for each battery unit
 qmin: Minimum limit of reactive power production for each battery unit
 [kVAr]
 
--  **CSV File Name: cwin_dist Characteristic of existing wind units**
+CSV File Name: cwin_dist :raw-html:`&rarr;` Characteristic of existing wind units
 
 **Columns:**
 
@@ -384,8 +387,8 @@ qmax: Maximum limit of reactive power production for each battery unit
 qmin: Minimum limit of reactive power production for each battery unit
 [kVAr]
 
--  **CSV File Name: geol_dist Geographical location of load points for
-   feeder routing**
+CSV File Name: geol_dist :raw-html:`&rarr;` Geographical location of load points for feeder routing
+***************************************************************************************************
 
 **Columns:**
 
@@ -401,7 +404,8 @@ Latitude: Latitude of a load point
 Note: The first column represents the index of each load point and it
 starts from 0
 
--  **Worksheet File Name: mgpc_dist Characteristic of load points**
+Worksheet File Name: mgpc_dist :raw-html:`&rarr;` Characteristic of load points
+*******************************************************************************
 
 **Sheets:**
 
@@ -416,63 +420,64 @@ used:
 Microgrid Load and LCOE Modelling Results, available online:
 https://data.nrel.gov/submissions/79
 
--  **CSV File Name: pdem_dist Hourly participation factors of load
-   points (active power)**
+CSV File Name: pdem_dist :raw-html:`&rarr;` Hourly participation factors of load points (active power)
+******************************************************************************************************
 
 Note: The **first row** represents the index of load points and **each
 column** represents the hourly participation factors for 24 hours of a
 single day.
 
--  **CSV File Name: prep_dist Hourly total active load levels of the
-   microgrid**
+CSV File Name: prep_dist :raw-html:`&rarr;` Hourly total active load levels of the microgrid
+*********************************************************************************************
 
 Note: The **first row** represents the index of all representative days
 and **each column** represent the hourly total active load levels for 24
 hours of each representative day in kW.
 
--  **CSV File Name: psol_dist Hourly total available solar active power
-   of the microgrid**
+CSV File Name: psol_dist :raw-html:`&rarr;` Hourly total available solar active power of the microgrid
+*******************************************************************************************************
 
 Note: The **first row** represents the index of all representative days
 and **each column** represent the hourly total available solar power for
 24 hours of each representative day in kW.
 
--  **CSV File Name: pwin_dist Hourly total available wind active power
-   of the microgrid**
+CSV File Name: pwin_dist :raw-html:`&rarr;` Hourly total available wind active power of the microgrid
+*****************************************************************************************************
 
 Note: The **first row** represents the index of all representative days
 and **each column** represent the hourly total available wind power for
 24 hours of each representative day in kW.
 
--  **CSV File Name: qdem_dist Hourly participation factors of load
-   points (reactive power)**
+CSV File Name: qdem_dist :raw-html:`&rarr;` Hourly participation factors of load points (reactive power)
+********************************************************************************************************
 
 Note: The **first row** represents the index of load points and **each
 column** represents the hourly participation factors for 24 hours of a
 single day.
 
--  **CSV File Name: qrep_dist Hourly total reactive load levels of the
-   microgrid**
+CSV File Name: qrep_dist :raw-html:`&rarr;` Hourly total reactive load levels of the microgrid
+**********************************************************************************************
 
 Note: The **first row** represents the index of all representative days
 and **each column** represent the hourly total reactive load levels for
 24 hours of each representative day in kW.
 
--  **CSV File Name: qsol_dist Hourly total available solar reactive
-   power of the microgrid**
+CSV File Name: qsol_dist :raw-html:`&rarr;` Hourly total available solar reactive power of the microgrid
+*************************************************************************************
 
 Note: The **first row** represents the index of all representative days
 and **each column** represent the hourly total available solar power for
 24 hours of each representative day in kW.
 
--  **CSV File Name: qwin_dist Hourly total available wind active power
-   of the microgrid**
+CSV File Name: qwin_dist :raw-html:`&rarr;` Hourly total available wind active power of the microgrid
+*****************************************************************************************************
 
 Note: The **first row** represents the index of all representative days
 and **each column** represent the hourly total available wind power for
 24 hours of each representative day in kW.
 
--  **CSV File Name: rou_dist Distance between pairs of connected buses**
+CSV File Name: rou_dist :raw-html:`&rarr;` Distance between pairs of connected buses
+************************************************************************************
 
 **Columns:**
 

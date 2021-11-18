@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# PyPSA documentation build configuration file, created by
-# sphinx-quickstart on Tue Jan  5 10:04:42 2016.
+# pyramses documentation build configuration file, created by
+# sphinx-quickstart on Tue Dec 08 14:05:03 2015.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -16,6 +16,7 @@ import sys
 import os
 import shlex
 import pyeplan
+
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -32,18 +33,20 @@ import pyeplan
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
-#    'sphinxcontrib.bibtex',
-    'sphinx.ext.imgconverter', # for SVG conversion
+    'sphinx.ext.intersphinx',
+    'sphinxcontrib.bibtex'
 ]
+
+disqus_shortname = ''
+
+intersphinx_mapping = {'python': ('https://docs.python.org/3.7', None)}
 
 autodoc_default_flags = ['members']
 autosummary_generate = True
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -127,13 +130,7 @@ html_theme = 'sphinx_rtd_theme'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {
-    'canonical_url': 'https://pyeplan.sps-lab.org',
-    'display_version': True,
-    'sticky_navigation': True,
-    #'style_nav_header_background': '#009682',
-}
-
+#html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
@@ -157,13 +154,7 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['_static']
-
-# html_context = {
-#    'css_files': [
-#        '_static/#theme_overrides.css',  # override wide tables in RTD theme
-#        ],
-#}
+html_static_path = ['_static']
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
@@ -172,11 +163,7 @@ html_theme_options = {
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
-#html_last_updated_fmt = '%b %d, %Y'
-
-# If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-#html_use_smartypants = True
+html_last_updated_fmt = '%b %d, %Y'
 
 # Custom sidebar templates, maps document names to template names.
 #html_sidebars = {}
@@ -195,10 +182,10 @@ html_theme_options = {
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
-html_show_sourcelink = True
+html_show_sourcelink = False
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
-html_show_sphinx = True
+#html_show_sphinx = True
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
 html_show_copyright = True
@@ -232,7 +219,7 @@ htmlhelp_basename = 'PyEPLANdoc'
 
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+'papersize': 'a4paper',
 
 # The font size ('10pt', '11pt' or '12pt').
 #'pointsize': '10pt',
@@ -251,14 +238,6 @@ latex_documents = [
   (master_doc, 'PyEPLAN.tex', u'PyEPLAN Documentation',
    u'Petros Aristidou (CUT)', 'manual'),
 ]
-
-
-#Added for rinoh http://www.mos6581.org/rinohtype/quickstart.html
-rinoh_documents = [(master_doc,            # top-level file (index.rst)
-                    'PyEPLAN',           # output (target.pdf)
-                    'PyEPLAN Documentation',   # document title
-                    'Petros Aristidou (CUT)')]   # document author
-
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
@@ -316,7 +295,4 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
-
-
-# Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}

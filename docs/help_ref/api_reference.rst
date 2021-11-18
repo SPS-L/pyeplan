@@ -2,28 +2,19 @@
 API Reference
 ######################
 
-Investment class
-----------------
-
-.. autoclass:: pyeplan.invsys
+Data processing class
+---------------------
+.. autoclass:: pyeplan.datsys
     :members:
 
-Operation class
----------------
+Routing class
+-------------
 
-.. autoclass:: pyeplan.opersys
+.. autoclass:: pyeplan.rousys
     :members:
-    
 
-Investment
-----------
+Investment and Operation class
+------------------------------
 
-.. automodule:: pyeplan.investment
-
-Operation
----------
-
-.. automodule:: pyeplan.operation
-
-
-
+.. autoclass:: pyeplan.inosys
+    :members:

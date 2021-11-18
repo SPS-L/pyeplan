@@ -42,7 +42,7 @@ extensions = [
 
 disqus_shortname = ''
 
-intersphinx_mapping = {'python': ('https://docs.python.org/3.7', None)}
+intersphinx_mapping = {'python': ('https://docs.python.org/3.8', None)}
 
 autodoc_default_flags = ['members']
 autosummary_generate = True

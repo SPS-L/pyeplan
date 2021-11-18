@@ -1,0 +1,11 @@
+# These packages are required for PyEPLAN's base functionality, installing those is sufficient to start playing
+pandas
+pyomo
+setuptools
+sphinx 
+sphinx_rtd_theme
+scipy
+numpy
+matplotlib
+sphinxcontrib-bibtex
+pyeplan

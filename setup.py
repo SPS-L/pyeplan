@@ -11,7 +11,7 @@ import os
 def read_file(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-required = ['pandas', 'pyomo', 'networkx', 'mplleaflet', 'matplotlib==3.3.0', 'timezonefinder', 'scikit-learn==1.0.0', 'openpyxl', 'glpk']
+required = ['pandas', 'pyomo', 'networkx', 'mplleaflet', 'matplotlib==3.3.0', 'timezonefinder', 'scikit-learn==1.0.0', 'openpyxl']
 
 from pyeplan import __version__, __author__, __email__, __status__, __url__, __name__
 

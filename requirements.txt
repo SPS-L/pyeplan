@@ -6,5 +6,4 @@ mplleaflet==0.0.5
 matplotlib==3.3.0
 timezonefinder==5.2.0
 scikit-learn==1.0.0
-glpk==4.65
 openpyxl==3.0.9

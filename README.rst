@@ -17,4 +17,6 @@ PyEPLAN: A Python-based Energy Planning tool
 
 PyEPLAN is a `free software <http://www.gnu.org/philosophy/free-sw.en.html>`_ toolbox for designing resilient mini-grids in developing countries. The initial development was funded under the UKRI GCRF project `CRESUM-HYRES <https://cera.leeds.ac.uk/cresum-hyres/>`_ at the `University of Leeds <https://leeds.ac.uk/>`_, but is now supported and co-developed by people in different universities (such as `CUT <https://sps.cut.ac.cy>`_, `ICL <https://www.imperial.ac.uk/>`_).
 
+[![Open Example In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/apetros/pyeplan/blob/master/examples/Watoto_Village_Case_Study.ipynb)
+
 .. image:: https://raw.githubusercontent.com/apetros/pyeplan/master/docs/img/gcrf.jpg

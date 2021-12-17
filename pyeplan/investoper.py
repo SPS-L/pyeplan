@@ -531,10 +531,14 @@ class inosys:
         m.inv_bat = pe.Constraint(rule=inv_bat_rule)
                    
         #Solve the optimization problem
-        opt = pe.SolverFactory(solver)
+        
         if solver == 'gurobi':
             opt.options['threads'] = 0
             opt.options['mipgap'] = 0
+            opt = pe.SolverFactory(solver, solver_io='python')
+        else:
+            opt = pe.SolverFactory(solver)
+            
         if neos:
             os.environ['NEOS_EMAIL'] = solemail
             solver_manager = pe.SolverManagerFactory('neos')

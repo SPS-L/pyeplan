@@ -533,9 +533,9 @@ class inosys:
         #Solve the optimization problem
         
         if solver == 'gurobi':
+            opt = pe.SolverFactory(solver, solver_io='python')
             opt.options['threads'] = 0
             opt.options['mipgap'] = 0
-            opt = pe.SolverFactory(solver, solver_io='python')
         else:
             opt = pe.SolverFactory(solver)
             

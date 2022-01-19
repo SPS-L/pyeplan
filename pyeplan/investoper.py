@@ -1,5 +1,6 @@
 import pandas as pd
 import pyomo.environ as pe
+import numpy as np
 import csv
 import os
 import shutil 
@@ -7,7 +8,6 @@ import shutil
 class inosys:
 
     def __init__(self, inp_folder, ref_bus, dshed_cost = 1000000, rshed_cost = 500, phase = 3, vmin=0.85, vmax=1.15, sbase = 1, sc_fa = 1):
-        
         '''
         Initialise the investment and operation problem.
         :param str inp_folder: The input directory for the data. It expects to find several CSV files detailing the system input data (Default current folder)
@@ -117,6 +117,8 @@ class inosys:
         self.vmax = vmax
         self.inp_folder = inp_folder
         self.phase = phase 
+
+        self.outdir = ''
 
 
     def solve(self, solver = 'glpk', neos = False, invest = False, onlyopr = True, commit = False, solemail = ''):
@@ -592,55 +594,55 @@ class inosys:
         self.qel_output = pyomo2dfopr(m.qel,m.el,m.tt,m.oo).T
     
         # Setup the results folder
-        outdir = self.inp_folder + os.sep + 'results'
-        if os.path.exists(outdir):
-            shutil.rmtree(outdir) 
-        os.makedirs(outdir)
+        self.outdir = self.inp_folder + os.sep + 'results'
+        if os.path.exists(self.outdir):
+            shutil.rmtree(self.outdir) 
+        os.makedirs(self.outdir)
         
-        with open(outdir + os.sep + 'obj.csv', 'w', newline='') as csvfile:
+        with open(self.outdir + os.sep + 'obj.csv', 'w', newline='') as csvfile:
             thewriter = csv.writer(csvfile)   
             thewriter.writerow(['total costs', self.total])
             thewriter.writerow(['total investment costs', self.total_inv])
             thewriter.writerow(['total operation costs', self.total_opr])
         
-        self.xg_output.to_csv(outdir + os.sep + 'xg.csv', index=False)
-        self.xs_output.to_csv(outdir + os.sep + 'xs.csv', index=False)
-        self.xw_output.to_csv(outdir + os.sep + 'xw.csv', index=False)
-        self.xb_output.to_csv(outdir + os.sep + 'xb.csv', index=False)
+        self.xg_output.to_csv(self.outdir + os.sep + 'xg.csv', index=False)
+        self.xs_output.to_csv(self.outdir + os.sep + 'xs.csv', index=False)
+        self.xw_output.to_csv(self.outdir + os.sep + 'xw.csv', index=False)
+        self.xb_output.to_csv(self.outdir + os.sep + 'xb.csv', index=False)
         
-        self.cu_output.to_csv(outdir + os.sep + 'cu.csv', index=False)
-        self.eu_output.to_csv(outdir + os.sep + 'eu.csv', index=False)
+        self.cu_output.to_csv(self.outdir + os.sep + 'cu.csv', index=False)
+        self.eu_output.to_csv(self.outdir + os.sep + 'eu.csv', index=False)
         
-        self.pcg_output.to_csv(outdir + os.sep + 'pcg.csv', index=False)
-        self.qcg_output.to_csv(outdir + os.sep + 'qcg.csv', index=False)
+        self.pcg_output.to_csv(self.outdir + os.sep + 'pcg.csv', index=False)
+        self.qcg_output.to_csv(self.outdir + os.sep + 'qcg.csv', index=False)
         
-        self.peg_output.to_csv(outdir + os.sep + 'peg.csv', index=False)
-        self.qeg_output.to_csv(outdir + os.sep + 'qeg.csv', index=False)
+        self.peg_output.to_csv(self.outdir + os.sep + 'peg.csv', index=False)
+        self.qeg_output.to_csv(self.outdir + os.sep + 'qeg.csv', index=False)
         
-        self.pcs_output.to_csv(outdir + os.sep + 'pcs.csv',index=False)
-        self.qcs_output.to_csv(outdir + os.sep + 'qcs.csv',index=False)
+        self.pcs_output.to_csv(self.outdir + os.sep + 'pcs.csv',index=False)
+        self.qcs_output.to_csv(self.outdir + os.sep + 'qcs.csv',index=False)
         
-        self.pes_output.to_csv(outdir + os.sep + 'pes.csv',index=False)
-        self.qes_output.to_csv(outdir + os.sep + 'qes.csv',index=False)
+        self.pes_output.to_csv(self.outdir + os.sep + 'pes.csv',index=False)
+        self.qes_output.to_csv(self.outdir + os.sep + 'qes.csv',index=False)
         
-        self.pcw_output.to_csv(outdir + os.sep + 'pcw.csv',index=False)
-        self.qcw_output.to_csv(outdir + os.sep + 'qcw.csv',index=False)
+        self.pcw_output.to_csv(self.outdir + os.sep + 'pcw.csv',index=False)
+        self.qcw_output.to_csv(self.outdir + os.sep + 'qcw.csv',index=False)
         
-        self.pew_output.to_csv(outdir + os.sep + 'pew.csv',index=False)
-        self.qew_output.to_csv(outdir + os.sep + 'qew.csv',index=False)
+        self.pew_output.to_csv(self.outdir + os.sep + 'pew.csv',index=False)
+        self.qew_output.to_csv(self.outdir + os.sep + 'qew.csv',index=False)
         
-        self.pbc_output.to_csv(outdir + os.sep + 'pbc.csv',index=False)
-        self.pbd_output.to_csv(outdir + os.sep + 'pbd.csv',index=False)
-        self.qcd_output.to_csv(outdir + os.sep + 'qcd.csv',index=False)
+        self.pbc_output.to_csv(self.outdir + os.sep + 'pbc.csv',index=False)
+        self.pbd_output.to_csv(self.outdir + os.sep + 'pbd.csv',index=False)
+        self.qcd_output.to_csv(self.outdir + os.sep + 'qcd.csv',index=False)
         
-        self.pds_output.to_csv(outdir + os.sep + 'pds.csv',index=False)
-        self.pss_output.to_csv(outdir + os.sep + 'pss.csv',index=False)
-        self.pws_output.to_csv(outdir + os.sep + 'pws.csv',index=False)
+        self.pds_output.to_csv(self.outdir + os.sep + 'pds.csv',index=False)
+        self.pss_output.to_csv(self.outdir + os.sep + 'pss.csv',index=False)
+        self.pws_output.to_csv(self.outdir + os.sep + 'pws.csv',index=False)
         
-        self.vol_output.to_csv(outdir + os.sep + 'vol.csv',index=False)
+        self.vol_output.to_csv(self.outdir + os.sep + 'vol.csv',index=False)
         
-        self.pel_output.to_csv(outdir + os.sep + 'pel.csv',index=False)
-        self.qel_output.to_csv(outdir + os.sep + 'qel.csv',index=False)
+        self.pel_output.to_csv(self.outdir + os.sep + 'pel.csv',index=False)
+        self.qel_output.to_csv(self.outdir + os.sep + 'qel.csv',index=False)
 
 def pyomo2dfinv(pyomo_var,index1):
     mat = []
@@ -670,3 +672,71 @@ def pyomo2dfoprm(pyomo_var,index1,index2,index3):
                 row.append(pyomo_var[i,j,k].value)
         mat.append(row)
     return pd.DataFrame(mat)
+
+def resCost(self):
+    '''Display the objective cost results.'''
+
+    if self.outdir != '' and os.path.exists(self.outdir):
+        pd.read_csv(self.outdir + "obj.csv")
+    else:
+        print('Need to succesfully run the solve function first.')
+        raise
+
+def resWind(self):
+    '''Display the Wind capacity investment results'''
+
+    if self.outdir != '' and os.path.exists(self.outdir):
+        cwin = pd.read_csv(self.inp_folder + os.sep + "cwin_dist.csv")
+        iwin = pd.read_csv(self.outdir + os.sep + "xw.csv")
+        cwin['Unit'] = (np.arange(1,len(iwin.columns)+1))
+        unit = cwin.loc[:,'Unit']
+        bus = np.array(cwin.loc[:,'bus'])
+        out_win =(((cwin.loc[:,'pmax']*round(iwin.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
+        out_win['Bus'] = bus
+        out_win.style
+    else:
+        print('Need to succesfully run the solve function first.')
+        raise
+
+def resSolar(self):
+    '''Display the Solar capacity investment results'''
+
+    if self.outdir != '' and os.path.exists(self.outdir):
+        csol = pd.read_csv(self.inp_folder + os.sep + "csol_dist.csv")
+        isol = pd.read_csv(self.outdir + os.sep + "xs.csv")
+        csol['Unit'] = (np.arange(1,len(isol.columns)+1))
+        unit = csol.loc[:,'Unit']
+        bus = np.array(csol.loc[:,'bus'])
+        out_sol =(((csol.loc[:,'pmax']*round(isol.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
+        out_sol['Bus'] = bus
+        out_sol.style
+    else:
+        print('Need to succesfully run the solve function first.')
+        raise
+
+def resConv(self):
+    '''Display the conventional generator capacity investment results'''
+
+    if self.outdir != '' and os.path.exists(self.outdir):
+        cgen = pd.read_csv(self.inp_folder + os.sep + "cgen_dist.csv")
+        igen = pd.read_csv(self.outdir + os.sep + "xg.csv")
+        cgen['Unit'] = (np.arange(1,len(igen.columns)+1))
+        unit = cgen.loc[:,'Unit']
+        bus = np.array(cgen.loc[:,'bus'])
+        out_gen =(((cgen.loc[:,'pmax']*round(igen.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
+        out_gen['Bus'] = bus
+        out_gen.style
+    else:
+        print('Need to succesfully run the solve function first.')
+        raise
+
+def resCurt(self):
+    '''Display the curtailed load results'''
+
+    if self.outdir != '' and os.path.exists(self.outdir):
+        pds =pd.read_csv(self.inp_folder + os.sep + "pds.csv")
+        pds.index.name ='Hour'
+        pds.style
+    else:
+        print('Need to succesfully run the solve function first.')
+        raise

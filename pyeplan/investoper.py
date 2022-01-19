@@ -709,7 +709,7 @@ class inosys:
         '''Display the curtailed load results'''
 
         if self.outdir != '' and os.path.exists(self.outdir):
-            pds = pd.read_csv(self.inp_folder + os.sep + "pds.csv")
+            pds = pd.read_csv(self.outdir + os.sep + "pds.csv")
             pds.index.name ='Hour'
             pds.style
             display(pds)

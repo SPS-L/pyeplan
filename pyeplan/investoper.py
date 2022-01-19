@@ -643,6 +643,74 @@ class inosys:
         
         self.pel_output.to_csv(self.outdir + os.sep + 'pel.csv',index=False)
         self.qel_output.to_csv(self.outdir + os.sep + 'qel.csv',index=False)
+    
+    def resCost(self):
+        '''Display the objective cost results.'''
+
+        if self.outdir != '' and os.path.exists(self.outdir):
+            pd.read_csv(self.outdir + "obj.csv")
+        else:
+            print('Need to succesfully run the solve function first.')
+            raise
+
+    def resWind(self):
+        '''Display the Wind capacity investment results'''
+
+        if self.outdir != '' and os.path.exists(self.outdir):
+            cwin = pd.read_csv(self.inp_folder + os.sep + "cwin_dist.csv")
+            iwin = pd.read_csv(self.outdir + os.sep + "xw.csv")
+            cwin['Unit'] = (np.arange(1,len(iwin.columns)+1))
+            unit = cwin.loc[:,'Unit']
+            bus = np.array(cwin.loc[:,'bus'])
+            out_win =(((cwin.loc[:,'pmax']*round(iwin.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
+            out_win['Bus'] = bus
+            out_win.style
+        else:
+            print('Need to succesfully run the solve function first.')
+            raise
+
+    def resSolar(self):
+        '''Display the Solar capacity investment results'''
+
+        if self.outdir != '' and os.path.exists(self.outdir):
+            csol = pd.read_csv(self.inp_folder + os.sep + "csol_dist.csv")
+            isol = pd.read_csv(self.outdir + os.sep + "xs.csv")
+            csol['Unit'] = (np.arange(1,len(isol.columns)+1))
+            unit = csol.loc[:,'Unit']
+            bus = np.array(csol.loc[:,'bus'])
+            out_sol =(((csol.loc[:,'pmax']*round(isol.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
+            out_sol['Bus'] = bus
+            out_sol.style
+        else:
+            print('Need to succesfully run the solve function first.')
+            raise
+
+    def resConv(self):
+        '''Display the conventional generator capacity investment results'''
+
+        if self.outdir != '' and os.path.exists(self.outdir):
+            cgen = pd.read_csv(self.inp_folder + os.sep + "cgen_dist.csv")
+            igen = pd.read_csv(self.outdir + os.sep + "xg.csv")
+            cgen['Unit'] = (np.arange(1,len(igen.columns)+1))
+            unit = cgen.loc[:,'Unit']
+            bus = np.array(cgen.loc[:,'bus'])
+            out_gen =(((cgen.loc[:,'pmax']*round(igen.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
+            out_gen['Bus'] = bus
+            out_gen.style
+        else:
+            print('Need to succesfully run the solve function first.')
+            raise
+
+    def resCurt(self):
+        '''Display the curtailed load results'''
+
+        if self.outdir != '' and os.path.exists(self.outdir):
+            pds =pd.read_csv(self.inp_folder + os.sep + "pds.csv")
+            pds.index.name ='Hour'
+            pds.style
+        else:
+            print('Need to succesfully run the solve function first.')
+            raise
 
 def pyomo2dfinv(pyomo_var,index1):
     mat = []
@@ -672,71 +740,3 @@ def pyomo2dfoprm(pyomo_var,index1,index2,index3):
                 row.append(pyomo_var[i,j,k].value)
         mat.append(row)
     return pd.DataFrame(mat)
-
-def resCost(self):
-    '''Display the objective cost results.'''
-
-    if self.outdir != '' and os.path.exists(self.outdir):
-        pd.read_csv(self.outdir + "obj.csv")
-    else:
-        print('Need to succesfully run the solve function first.')
-        raise
-
-def resWind(self):
-    '''Display the Wind capacity investment results'''
-
-    if self.outdir != '' and os.path.exists(self.outdir):
-        cwin = pd.read_csv(self.inp_folder + os.sep + "cwin_dist.csv")
-        iwin = pd.read_csv(self.outdir + os.sep + "xw.csv")
-        cwin['Unit'] = (np.arange(1,len(iwin.columns)+1))
-        unit = cwin.loc[:,'Unit']
-        bus = np.array(cwin.loc[:,'bus'])
-        out_win =(((cwin.loc[:,'pmax']*round(iwin.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
-        out_win['Bus'] = bus
-        out_win.style
-    else:
-        print('Need to succesfully run the solve function first.')
-        raise
-
-def resSolar(self):
-    '''Display the Solar capacity investment results'''
-
-    if self.outdir != '' and os.path.exists(self.outdir):
-        csol = pd.read_csv(self.inp_folder + os.sep + "csol_dist.csv")
-        isol = pd.read_csv(self.outdir + os.sep + "xs.csv")
-        csol['Unit'] = (np.arange(1,len(isol.columns)+1))
-        unit = csol.loc[:,'Unit']
-        bus = np.array(csol.loc[:,'bus'])
-        out_sol =(((csol.loc[:,'pmax']*round(isol.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
-        out_sol['Bus'] = bus
-        out_sol.style
-    else:
-        print('Need to succesfully run the solve function first.')
-        raise
-
-def resConv(self):
-    '''Display the conventional generator capacity investment results'''
-
-    if self.outdir != '' and os.path.exists(self.outdir):
-        cgen = pd.read_csv(self.inp_folder + os.sep + "cgen_dist.csv")
-        igen = pd.read_csv(self.outdir + os.sep + "xg.csv")
-        cgen['Unit'] = (np.arange(1,len(igen.columns)+1))
-        unit = cgen.loc[:,'Unit']
-        bus = np.array(cgen.loc[:,'bus'])
-        out_gen =(((cgen.loc[:,'pmax']*round(igen.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
-        out_gen['Bus'] = bus
-        out_gen.style
-    else:
-        print('Need to succesfully run the solve function first.')
-        raise
-
-def resCurt(self):
-    '''Display the curtailed load results'''
-
-    if self.outdir != '' and os.path.exists(self.outdir):
-        pds =pd.read_csv(self.inp_folder + os.sep + "pds.csv")
-        pds.index.name ='Hour'
-        pds.style
-    else:
-        print('Need to succesfully run the solve function first.')
-        raise

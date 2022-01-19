@@ -648,7 +648,7 @@ class inosys:
         '''Display the objective cost results.'''
 
         if self.outdir != '' and os.path.exists(self.outdir):
-            pd.read_csv(self.outdir + "obj.csv")
+            pd.read_csv(self.outdir + os.sep + "obj.csv")
         else:
             print('Need to succesfully run the solve function first.')
             raise

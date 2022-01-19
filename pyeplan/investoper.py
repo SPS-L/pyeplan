@@ -671,6 +671,23 @@ class inosys:
             print('Need to succesfully run the solve function first.')
             raise
 
+    def resBat(self):
+        '''Display the Battery capacity investment results'''
+
+        if self.outdir != '' and os.path.exists(self.outdir):
+            cbat = pd.read_csv(self.inp_folder + os.sep + "cbat_dist.csv")
+            ibat = pd.read_csv(self.outdir + os.sep + "xb.csv")
+            cbat['Unit'] = (np.arange(1,len(ibat.columns)+1))
+            unit = cbat.loc[:,'Unit']
+            bus = np.array(cbat.loc[:,'bus'])
+            out_bat =(((cbat.loc[:,'pmax']*round(ibat.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
+            out_bat['Bus'] = bus
+            out_bat.style
+            display(out_bat)
+        else:
+            print('Need to succesfully run the solve function first.')
+            raise
+
     def resSolar(self):
         '''Display the Solar capacity investment results'''
 

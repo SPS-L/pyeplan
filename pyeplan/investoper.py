@@ -1,3 +1,4 @@
+from IPython.display import display
 import pandas as pd
 import pyomo.environ as pe
 import numpy as np
@@ -648,7 +649,7 @@ class inosys:
         '''Display the objective cost results.'''
 
         if self.outdir != '' and os.path.exists(self.outdir):
-            pd.read_csv(self.outdir + os.sep + "obj.csv")
+            display(pd.read_csv(self.outdir + os.sep + "obj.csv"))
         else:
             print('Need to succesfully run the solve function first.')
             raise
@@ -665,6 +666,7 @@ class inosys:
             out_win =(((cwin.loc[:,'pmax']*round(iwin.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
             out_win['Bus'] = bus
             out_win.style
+            display(out_win)
         else:
             print('Need to succesfully run the solve function first.')
             raise
@@ -681,6 +683,7 @@ class inosys:
             out_sol =(((csol.loc[:,'pmax']*round(isol.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
             out_sol['Bus'] = bus
             out_sol.style
+            display(out_sol)
         else:
             print('Need to succesfully run the solve function first.')
             raise
@@ -697,6 +700,7 @@ class inosys:
             out_gen =(((cgen.loc[:,'pmax']*round(igen.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
             out_gen['Bus'] = bus
             out_gen.style
+            display(out_gen)
         else:
             print('Need to succesfully run the solve function first.')
             raise
@@ -705,9 +709,10 @@ class inosys:
         '''Display the curtailed load results'''
 
         if self.outdir != '' and os.path.exists(self.outdir):
-            pds =pd.read_csv(self.inp_folder + os.sep + "pds.csv")
+            pds = pd.read_csv(self.inp_folder + os.sep + "pds.csv")
             pds.index.name ='Hour'
             pds.style
+            display(pds)
         else:
             print('Need to succesfully run the solve function first.')
             raise

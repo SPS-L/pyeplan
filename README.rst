@@ -11,9 +11,6 @@ PyEPLAN: A Python-based Energy Planning tool
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3894705.svg
    :target: https://doi.org/10.5281/zenodo.3894705
 
-.. image:: https://img.shields.io/readthedocs/pyeplan/latest
-   :target: https://pyeplan.sps-lab.org/
-
 .. image:: https://colab.research.google.com/assets/colab-badge.svg
    :target: https://colab.research.google.com/github/apetros/pyeplan/blob/master/examples/Watoto_Village_Case_Study.ipynb
 

@@ -9,7 +9,14 @@ Please let us know if you use the software!
 Universities and Research Institutes
 ====================================
 
+* University of Leeds
+* Cyprus University of Technology
+* ETH Zurich
+* DTU Denmark
+* Newcastle University UK
 
 
 Companies and Non-Governmental Organisations
 ============================================
+
+* Alderney Electricity Ltd

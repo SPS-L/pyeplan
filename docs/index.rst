@@ -66,6 +66,7 @@ Documentation
    help_ref/api_reference
    help_ref/citing
    help_ref/users
+   LICENSE.rst
    
 .. image:: img/gcrf.jpg
     :width: 200px

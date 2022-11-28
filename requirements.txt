@@ -7,4 +7,4 @@ matplotlib==3.3.0
 timezonefinder==5.2.0
 scikit-learn==1.0.0
 openpyxl==3.0.9
-IPython
+ipython

@@ -56,6 +56,7 @@ Documentation
 * :doc:`help_ref/api_reference`
 * :doc:`help_ref/citing`
 * :doc:`help_ref/users`
+* :doc:`LICENSE`
 
 .. toctree::
    :hidden:

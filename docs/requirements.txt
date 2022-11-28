@@ -6,3 +6,4 @@ numpy
 matplotlib
 pyeplan
 sphinxcontrib-bibtex<2.0.0
+ipython

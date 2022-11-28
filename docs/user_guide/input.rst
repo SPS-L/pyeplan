@@ -463,7 +463,7 @@ and **each column** represent the hourly total reactive load levels for
 24 hours of each representative day in kW.
 
 CSV File Name: qsol_dist :raw-html:`&rarr;` Hourly total available solar reactive power of the microgrid
-*************************************************************************************
+********************************************************************************************************
 
 Note: The **first row** represents the index of all representative days
 and **each column** represent the hourly total available solar power for

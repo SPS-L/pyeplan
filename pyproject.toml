@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "PyEPLAN"
+version = "0.4.6"
+authors = [
+  { name="Shahab Dehghan", email="s.dehghan@ieee.org" },
+  { name="Agnes Nakiganda", email="a.m.nakiganda@gmail.com" },
+  { name="Petros Aristidou", email="p.aristidou@ieee.org" }
+]
+description = "Python library for planning and operation of resilient microgrids."
+readme = "README.rst"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/SPS-L/pyeplan"
+"Bug Tracker" = "https://github.com/SPS-L/pyeplan/issues"

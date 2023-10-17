@@ -13,23 +13,21 @@ def read_file(fname):
 
 required = ['pandas', 'pyomo', 'networkx', 'mplleaflet', 'matplotlib==3.3.0', 'timezonefinder', 'scikit-learn==1.0.0', 'openpyxl', 'ipython']
 
-from pyeplan import __version__, __author__, __email__, __status__, __url__, __name__
-
 setup(
-    name=__name__,
-    version=__version__,
+    name='pyeplan',
+    packages=find_packages(),
+    version='0.4.6',
     description='Python library for planning and operation of resilient microgrids.',
-    author=__author__,
-    author_email=__email__,
-    url=__url__,
+    author="Shahab Dehghan",
+    author_email="s.dehghan@ieee.org",
+    url="https://github.com/SPS-L/pyeplan",
     keywords=['Operation', 'Planning', 'Microgrids'],
     license='Apache License 2.0',
     long_description=read_file('README.rst'),
     long_description_content_type='text/x-rst',
-    packages=find_packages(),
     install_requires=required, 
     classifiers=[
-        "Development Status :: " + __status__,
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Environment :: Console",
         "License :: OSI Approved :: Apache Software License",

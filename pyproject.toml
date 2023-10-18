@@ -1,24 +1,46 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyeplan"
-version = "0.4.6"
 authors = [
   { name="Shahab Dehghan", email="s.dehghan@ieee.org" },
   { name="Agnes Nakiganda", email="a.m.nakiganda@gmail.com" },
   { name="Petros Aristidou", email="p.aristidou@ieee.org" }
 ]
+keywords = ['Operation', 'Planning', 'Microgrids']
 description = "Python library for planning and operation of resilient microgrids."
-readme = "README.rst"
+readme = "README.md"
 requires-python = ">=3.7"
+license = { text = "Apache Software License" }
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: Apache Software License", 
     "Operating System :: OS Independent",
 ]
+dependencies = [
+    "pandas",
+    "pyomo",
+    "networkx",
+    "matplotlib==3.3.0",
+    "timezonefinder",
+    "scikit-learn",
+    "openpyxl",
+    "ipython",
+    "mplleaflet"
+]
+
+dynamic = ["version"]
 
 [project.urls]
-"Homepage" = "https://github.com/SPS-L/pyeplan"
+"Homepage" = "https://gpyeplan.sps-lab.org"
 "Bug Tracker" = "https://github.com/SPS-L/pyeplan/issues"
+
+[tool.setuptools]
+packages = ["pyeplan"]
+
+[tool.setuptools.dynamic]
+version = { attr = "pyeplan.__version__" }
+
+

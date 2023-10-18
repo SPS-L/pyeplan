@@ -34,7 +34,7 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-"Homepage" = "https://gpyeplan.sps-lab.org"
+"Homepage" = "https://pyeplan.sps-lab.org"
 "Bug Tracker" = "https://github.com/SPS-L/pyeplan/issues"
 
 [tool.setuptools]

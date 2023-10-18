@@ -3,7 +3,7 @@
 """Python library for planning and operation of resilient microgrids."""
 
 __name__ = "pyeplan"
-__version__ = '0.4.7'
+__version__ = '0.5.0'
 __author__ = u'2023 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
 __copyright__ = u'2023 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
 __license__ ='Apache Software License',

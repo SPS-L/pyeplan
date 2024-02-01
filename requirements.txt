@@ -6,5 +6,5 @@ networkx==2.6.3
 mplleaflet==0.0.5
 matplotlib==3.3.0
 timezonefinder==5.2.0
-scikit-learn==1.0.0
+scikit-learn==1.0.1
 openpyxl==3.0.9

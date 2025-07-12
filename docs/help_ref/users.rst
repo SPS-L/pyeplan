@@ -46,15 +46,6 @@ Case Studies
 
 **Academic Research**: Multiple peer-reviewed publications using PyEPLAN for microgrid analysis and optimization.
 
-Publications
-===========
-
-PyEPLAN has been referenced in several academic publications:
-
-* Nakiganda, A., et al. "Optimal Planning of Sustainable Microgrids in Developing Countries." IEEE Transactions on Power Systems, 2021.
-* Dehghan, S., et al. "Resilient Microgrid Planning for Rural Electrification." Applied Energy, 2020.
-* Aristidou, P., et al. "PyEPLAN: A Python-based Energy Planning Tool for Microgrids." SoftwareX, 2021.
-
 Contributing Users
 =================
 

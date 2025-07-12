@@ -60,14 +60,14 @@ Example Usage:
 """
 
 __name__ = "pyeplan"
-__version__ = '0.5.1'
-__author__ = u'2023 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
-__copyright__ = u'2023 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
+__version__ = '1.0.0'
+__author__ = u'2025 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
+__copyright__ = u'2025 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
 __license__ ='Apache Software License',
 __maintainer__ = "s.dehghan@ieee.org"
 __email__ = "s.dehghan@ieee.org"
 __url__ = "https://pyeplan.sps-lab.org/"
-__status__ = "4 - Beta"
+__status__ = "5 - Production/Stable"
 
 
 from .investoper import inosys

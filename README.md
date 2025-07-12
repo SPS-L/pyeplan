@@ -267,6 +267,146 @@ PyEPlan generates comprehensive output files in the `results/` directory:
 - **User Guide**: Available in the `docs/` directory
 - **Examples**: Jupyter notebooks in the `examples/` directory
 
+## Testing
+
+PyEPlan includes comprehensive unit tests covering all major functionality. The test suite ensures code quality and reliability.
+
+### Test Structure
+
+The tests are organized in the `tests/` directory:
+
+- **`test_dataproc.py`**: Data processing module tests (353 lines)
+  - PVGIS API integration
+  - Time series clustering
+  - Data preprocessing and file generation
+  - Power factor calculations
+  - Timezone handling
+
+- **`test_routing.py`**: Network routing module tests (385 lines)
+  - Minimum spanning tree algorithm
+  - Geographic distance calculations
+  - Cable parameter calculations
+  - Network topology generation
+
+- **`test_investoper.py`**: Investment/operation optimization tests (626 lines)
+  - Model initialization and data loading
+  - Optimization problem formulation
+  - Solver integration
+  - Result processing and output generation
+
+- **`test_pyeplan_integration.py`**: Integration tests (539 lines)
+  - End-to-end workflows
+  - Module interactions
+  - Real-world example scenarios
+  - Error handling and edge cases
+
+### Running Tests
+
+#### Prerequisites
+
+```bash
+# Install test dependencies
+pip install -r requirements.txt
+```
+
+#### Quick Test Run
+
+```bash
+# Run all tests
+python tests/run_tests.py
+
+# Run with verbose output
+python tests/run_tests.py --verbose
+
+# Run specific test module
+python tests/run_tests.py --module test_dataproc
+
+# List available test modules
+python tests/run_tests.py --list
+```
+
+#### Using unittest directly
+
+```bash
+# Run all tests
+python -m unittest discover tests
+
+# Run specific test file
+python -m unittest tests.test_dataproc
+
+# Run specific test class
+python -m unittest tests.test_dataproc.TestDatsys
+
+# Run specific test method
+python -m unittest tests.test_dataproc.TestDatsys.test_init_basic_parameters
+```
+
+#### Using pytest (recommended)
+
+```bash
+# Install pytest
+pip install pytest
+
+# Run all tests
+pytest tests/
+
+# Run with verbose output
+pytest tests/ -v
+
+# Run specific test file
+pytest tests/test_dataproc.py
+
+# Run tests matching pattern
+pytest tests/ -k "test_init"
+```
+
+### Test Coverage
+
+The test suite covers:
+
+✅ **Data Processing Module**
+- Initialization with various parameters
+- PVGIS API integration (mocked)
+- Time series data extraction and clustering
+- File generation and output validation
+- Error handling for invalid inputs
+
+✅ **Network Routing Module**
+- Cable parameter calculations
+- Minimum spanning tree generation
+- Geographic distance calculations
+- Network topology validation
+
+✅ **Investment/Operation Module**
+- Model initialization and data loading
+- Optimization problem formulation (mocked)
+- Result processing and output generation
+- Utility functions
+
+✅ **Integration Tests**
+- Complete workflow testing
+- Module interaction testing
+- Real example data processing
+- Error handling and edge cases
+
+### Mocking Strategy
+
+Tests use mocking to ensure reliability:
+- **PVGIS API**: Mocked to avoid network calls
+- **Optimization Solvers**: Mocked to avoid solver dependencies
+- **File System**: Uses temporary directories
+- **Network Operations**: Mocked where appropriate
+
+### Continuous Integration
+
+Tests are designed for CI/CD environments:
+- No external network dependencies
+- No external solver dependencies
+- Fast execution with minimal data processing
+- Clear pass/fail criteria
+
+For detailed testing information, see [tests/README.md](tests/README.md).
+
 ## Contributing
 
 We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.

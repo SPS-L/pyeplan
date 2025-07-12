@@ -15,9 +15,11 @@ Mathematical Formulation
 The investment planning problem is formulated as a mixed-integer linear programming (MILP) model:
 
 **Objective Function**:
+
 Minimize total system cost = Investment costs + Operation costs + Maintenance costs
 
 **Constraints**:
+
 * Power balance constraints
 * Capacity constraints for generators and storage
 * Network flow constraints
@@ -37,25 +39,25 @@ Key Features
 Usage Example
 ------------
 
-```python
-from pyeplan import inosys
+.. code-block:: python
 
-# Initialize investment planning system
-inv_system = inosys()
+    from pyeplan import inosys
 
-# Load input data
-inv_system.load_data('input_data.csv')
+    # Initialize investment planning system
+    inv_system = inosys()
 
-# Run investment planning
-results = inv_system.investment_planning(
-    planning_horizon=10,  # years
-    discount_rate=0.08,
-    reliability_target=0.99
-)
+    # Load input data
+    inv_system.load_data('input_data.csv')
 
-# Analyze results
-inv_system.analyze_results(results)
-```
+    # Run investment planning
+    results = inv_system.investment_planning(
+        planning_horizon=10,  # years
+        discount_rate=0.08,
+        reliability_target=0.99
+    )
+
+    # Analyze results
+    inv_system.analyze_results(results)
 
 Operation Planning
 =================
@@ -68,9 +70,11 @@ Mathematical Formulation
 The operation planning problem is formulated as a linear programming (LP) model:
 
 **Objective Function**:
+
 Minimize operation cost = Fuel costs + Variable O&M costs + Grid exchange costs
 
 **Constraints**:
+
 * Power balance at each bus
 * Generator capacity and ramping constraints
 * Storage charge/discharge constraints
@@ -89,24 +93,24 @@ Key Features
 Usage Example
 ------------
 
-```python
-from pyeplan import inosys
+.. code-block:: python
 
-# Initialize operation planning system
-op_system = inosys()
+    from pyeplan import inosys
 
-# Load input data
-op_system.load_data('operation_data.csv')
+    # Initialize operation planning system
+    op_system = inosys()
 
-# Run operation planning
-results = op_system.operation_planning(
-    time_horizon=24,  # hours
-    reserve_margin=0.15
-)
+    # Load input data
+    op_system.load_data('operation_data.csv')
 
-# Analyze results
-op_system.analyze_operation(results)
-```
+    # Run operation planning
+    results = op_system.operation_planning(
+        time_horizon=24,  # hours
+        reserve_margin=0.15
+    )
+
+    # Analyze results
+    op_system.analyze_operation(results)
 
 Integrated Planning
 ==================
@@ -114,6 +118,7 @@ Integrated Planning
 PyEPLAN allows for integrated investment and operation planning, where long-term investment decisions are optimized considering detailed operational constraints.
 
 Benefits:
+
 * More accurate cost estimates
 * Better technology selection
 * Improved system reliability

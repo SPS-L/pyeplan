@@ -15,6 +15,11 @@
 import sys
 import os
 import shlex
+
+# Set matplotlib backend to non-interactive for headless environments
+import matplotlib
+matplotlib.use('Agg')
+
 import pyeplan
 
 
@@ -64,8 +69,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PyEPLAN'
-copyright = u'2021 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
-author = u'2021 Shahab Dehghan (ICL), Agnes Nakiganda (UoL), Petros Aristidou (CUT)'
+copyright = u'2025 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
+author = u'2025 Shahab Dehghan (NCL), Agnes Nakiganda (ICL), Petros Aristidou (CUT)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

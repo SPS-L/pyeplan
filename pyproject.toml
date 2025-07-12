@@ -7,7 +7,7 @@ name = "pyeplan"
 authors = [
   { name="Shahab Dehghan", email="s.dehghan@ieee.org" },
   { name="Agnes Nakiganda", email="a.m.nakiganda@gmail.com" },
-  { name="Petros Aristidou", email="p.aristidou@ieee.org" }
+  { name="Petros Aristidou", email="petros.aristidou@cut.ac.cy" }
 ]
 keywords = ['energy', 'planning', 'microgrids', 'optimization', 'resilience', 'power-systems']
 description = "Python library for planning and operation of resilient microgrids."
@@ -15,7 +15,7 @@ readme = "README.md"
 requires-python = ">=3.7"
 license = { text = "Apache Software License" }
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",

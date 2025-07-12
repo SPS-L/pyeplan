@@ -14,7 +14,16 @@ PyEPLAN: A Python-based Energy Planning tool
    :target: https://doi.org/10.5281/zenodo.3894705
 
 
-PyEPLAN stands for "Python-based Energy Planning tool". It is a `free software <http://www.gnu.org/philosophy/free-sw.en.html>`_ toolbox for Planning and Operation of Sustainable Micro-grids. 
+PyEPLAN stands for "Python-based Energy Planning tool". It is a `free software <http://www.gnu.org/philosophy/free-sw.en.html>`_ toolbox for Planning and Operation of Sustainable Micro-grids.
+
+PyEPLAN provides a comprehensive framework for microgrid planning and operation optimization, featuring:
+
+* **Data Processing**: Historical weather data extraction and representative day clustering
+* **Network Routing**: Optimal feeder routing using minimum spanning tree algorithms  
+* **Investment Planning**: Long-term capacity expansion and technology selection
+* **Operation Planning**: Short-term dispatch optimization and cost analysis
+
+The tool supports both on-grid and off-grid microgrid configurations, handles uncertainty through scenario-based optimization, and integrates renewable energy sources with conventional generation and energy storage systems. 
 
 Documentation
 =============

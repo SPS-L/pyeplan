@@ -282,7 +282,7 @@ If you use PyEPlan in your research, please cite:
   title={PyEPlan: A Python-based Energy Planning tool},
   author={Dehghan, Shahab and Nakiganda, Agnes and Aristidou, Petros},
   year={2020},
-  url={https://github.com/apetros/pyeplan},
+  url={https://github.com/SPS-L/pyeplan},
   doi={10.5281/zenodo.3894705}
 }
 ```
@@ -300,11 +300,10 @@ This project is licensed under the Apache Software License - see the [LICENSE.tx
 
 - **Email**: s.dehghan@ieee.org
 - **Website**: [https://pyeplan.sps-lab.org/](https://pyeplan.sps-lab.org/)
-- **GitHub Issues**: [https://github.com/apetros/pyeplan/issues](https://github.com/apetros/pyeplan/issues)
+- **GitHub Issues**: [https://github.com/SPS-L/pyeplan/issues](https://github.com/SPS-L/pyeplan/issues)
 
 ## Acknowledgments
 
 - UKRI GCRF project [CRESUM-HYRES](https://cera.leeds.ac.uk/cresum-hyres/)
 - [University of Leeds](https://leeds.ac.uk/)
 - [Cyprus University of Technology](https://sps.cut.ac.cy)
-- [Imperial College London](https://www.imperial.ac.uk/)

@@ -9,33 +9,49 @@ authors = [
   { name="Agnes Nakiganda", email="a.m.nakiganda@gmail.com" },
   { name="Petros Aristidou", email="p.aristidou@ieee.org" }
 ]
-keywords = ['Operation', 'Planning', 'Microgrids']
+keywords = ['energy', 'planning', 'microgrids', 'optimization', 'resilience', 'power-systems']
 description = "Python library for planning and operation of resilient microgrids."
 readme = "README.md"
 requires-python = ">=3.7"
 license = { text = "Apache Software License" }
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: Apache Software License", 
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "pandas",
-    "pyomo",
-    "networkx",
-    "matplotlib==3.3.0",
-    "timezonefinder",
-    "scikit-learn",
-    "openpyxl",
-    "ipython",
-    "mplleaflet"
+    "pandas>=1.3.4,<2.0.0",
+    "pyomo>=6.1.2,<7.0.0",
+    "networkx>=2.6.3,<3.0.0",
+    "matplotlib>=3.3.0,<4.0.0",
+    "timezonefinder>=5.2.0,<6.0.0",
+    "scikit-learn>=1.0.0,<2.0.0",
+    "openpyxl>=3.0.9,<4.0.0",
+    "ipython>=7.0.0,<9.0.0",
+    "mplleaflet>=0.0.5,<1.0.0",
+    "numpy>=1.21.0,<2.0.0",
+    "jupyter>=1.0.0,<2.0.0"
 ]
 
 dynamic = ["version"]
 
 [project.urls]
 "Homepage" = "https://pyeplan.sps-lab.org"
+"Documentation" = "https://pyeplan.sps-lab.org"
+"Repository" = "https://github.com/SPS-L/pyeplan"
 "Bug Tracker" = "https://github.com/SPS-L/pyeplan/issues"
+"Source" = "https://github.com/SPS-L/pyeplan"
 
 [tool.setuptools]
 packages = ["pyeplan"]

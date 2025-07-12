@@ -4,8 +4,6 @@
 
 PyEPlan is a [free software](http://www.gnu.org/philosophy/free-sw.en.html) toolbox for designing resilient mini-grids in developing countries. The initial development was funded under the UKRI GCRF project [CRESUM-HYRES](https://cera.leeds.ac.uk/cresum-hyres/) at the [University of Leeds](https://leeds.ac.uk/), but is now supported and co-developed by people in different universities (such as [CUT](https://sps.cut.ac.cy), [ICL](https://www.imperial.ac.uk/)).
 
-![image](https://raw.githubusercontent.com/SPS-L/pyeplan/master/docs/img/gcrf.jpg)
-
 ## Overview
 
 PyEPlan is a comprehensive Python library designed for the planning and operation of resilient microgrids. It provides tools for data processing, network routing, and investment/operation optimization of microgrid systems, with particular focus on applications in developing countries and rural electrification projects.

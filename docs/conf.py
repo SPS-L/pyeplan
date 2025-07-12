@@ -17,8 +17,8 @@ import os
 import shlex
 
 # Set matplotlib backend to non-interactive for headless environments
-import matplotlib
-matplotlib.use('Agg')
+# Must be done before any matplotlib imports
+os.environ['MPLBACKEND'] = 'Agg'
 
 import pyeplan
 

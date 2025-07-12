@@ -10,6 +10,10 @@ PyEPLAN: A Python-based Energy Planning tool
 .. image:: https://img.shields.io/pypi/l/pyeplan.svg
     :target: License
 
+.. image:: https://img.shields.io/github/stars/SPS-L/pyeplan.svg
+    :target: https://github.com/SPS-L/pyeplan
+    :alt: GitHub stars
+
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3894705.svg
    :target: https://doi.org/10.5281/zenodo.3894705
 

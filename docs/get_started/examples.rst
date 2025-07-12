@@ -2,5 +2,5 @@
  Examples
 ################
 
-There are examples available in the `PyEPLAN github repository <https://github.com/apetros/PyEPLAN>`_.
+There are examples available in the `PyEPLAN github repository <https://github.com/SPS-L/PyEPLAN>`_.
 

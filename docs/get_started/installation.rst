@@ -50,7 +50,7 @@ If you have the Python package installer ``pip`` then just run::
 
 If you're feeling adventurous, you can also install the latest master branch from github with::
 
-    pip install git+https://github.com/apetros/pyeplan.git
+    pip install git+https://github.com/SPS-L/pyeplan.git
 
 
 .. _upgrading-pyeplan:

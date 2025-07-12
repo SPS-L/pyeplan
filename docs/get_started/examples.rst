@@ -31,20 +31,20 @@ Getting Started with Examples
 ============================
 
 1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/SPS-L/pyeplan.git
-   cd pyeplan
-   ```
+
+    git clone https://github.com/SPS-L/pyeplan.git
+    cd pyeplan
+
 
 2. **Install PyEPLAN**:
-   ```bash
-   pip install -e .
-   ```
+
+    pip install -e .
+
 
 3. **Run Jupyter notebooks**:
-   ```bash
-   jupyter notebook examples/
-   ```
+
+    jupyter notebook examples/
+
 
 4. **Explore the data files** in each example directory to understand the input format and requirements.
 

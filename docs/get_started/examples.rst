@@ -30,18 +30,18 @@ Available Examples
 Getting Started with Examples
 ============================
 
-1. **Clone the repository**:
+1. **Clone the repository**::
 
     git clone https://github.com/SPS-L/pyeplan.git
     cd pyeplan
 
 
-2. **Install PyEPLAN**:
+2. **Install PyEPLAN**::
 
     pip install -e .
 
 
-3. **Run Jupyter notebooks**:
+3. **Run Jupyter notebooks**::
 
     jupyter notebook examples/
 

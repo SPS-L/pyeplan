@@ -4,8 +4,8 @@ Release Notes
 
 This section documents the version history and changes in PyEPLAN releases.
 
-PyEPLAN 1.0.0 (2025)
-====================
+PyEPLAN 1.0.0 (12 Jul 2024)
+============================
 
 **Major Release - Production Ready**
 
@@ -41,10 +41,44 @@ Breaking Changes:
 * Changed default solver parameters for improved performance
 * Modified input file formats for better standardization
 
-PyEPLAN 0.0.2 (13 Feb 2021)
-===========================
+PyEPLAN 0.5 (18 Oct 2023)
+==========================
 
-**Beta Release**
+**Minor Release**
+
+Bug Fixes:
+
+* Fixed various issues and made it compatible with Python >v3.11
+* Improved package compatibility and installation
+* Enhanced error handling for newer Python versions
+
+PyEPLAN 0.4 (14 Nov 2022)
+==========================
+
+**Minor Release**
+
+Features:
+
+* Enhanced data processing capabilities
+* Improved optimization algorithms
+* Better documentation and examples
+* Enhanced error handling and validation
+
+PyEPLAN 0.3 (14 Feb 2022)
+==========================
+
+**Patch Release**
+
+Bug Fixes:
+
+* Updated __init__.py for better package structure
+* Fixed import issues and module organization
+* Improved package distribution
+
+PyEPLAN 0.1 (15 Jun 2020)
+==========================
+
+**First Beta Release (Pre-release)**
 
 Features:
 
@@ -60,18 +94,6 @@ Known Issues:
 * Basic error handling
 * Minimal documentation
 * Performance issues with large problems
-
-PyEPLAN 0.0.1 (2020)
-====================
-
-**Alpha Release**
-
-Features:
-
-* Proof-of-concept implementation
-* Basic optimization framework
-* Simple data structures
-* Initial documentation
 
 Development Roadmap
 ==================
@@ -95,16 +117,25 @@ Development Roadmap
 Migration Guide
 ==============
 
-**From v0.0.2 to v1.0.0**:
+**From v0.5 to v1.0.0**:
 
 * Update import statements to use new module structure
 * Modify input file formats to match new standards
 * Update solver configuration parameters
 * Review and update custom scripts for API changes
 
-**From v0.0.1 to v1.0.0**:
+**From v0.4 to v0.5**:
 
-* Complete rewrite required due to major architectural changes
-* New data processing pipeline
-* Updated optimization framework
-* Enhanced error handling and validation
+* No breaking changes - compatibility improvements only
+* Enhanced Python 3.11+ support
+
+**From v0.3 to v0.4**:
+
+* Enhanced functionality with improved algorithms
+* Better documentation and error handling
+
+**From v0.1 to v0.3**:
+
+* Updated package structure and imports
+* Improved module organization
+* Enhanced error handling

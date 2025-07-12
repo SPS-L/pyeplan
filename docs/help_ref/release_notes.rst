@@ -10,6 +10,7 @@ PyEPLAN 1.0.0 (2025)
 **Major Release - Production Ready**
 
 New Features:
+
 * Complete rewrite of core optimization engine for improved performance
 * Enhanced data processing with support for multiple weather data sources
 * Advanced clustering algorithms for representative day selection
@@ -19,6 +20,7 @@ New Features:
 * Integration with multiple optimization solvers (Gurobi, CPLEX, GLPK, CBC)
 
 Enhancements:
+
 * Better memory management for large-scale problems
 * Enhanced visualization capabilities with interactive plots
 * Improved network routing algorithms
@@ -27,12 +29,14 @@ Enhancements:
 * Enhanced user interface and documentation
 
 Bug Fixes:
+
 * Fixed convergence issues in large optimization problems
 * Corrected timezone handling in weather data extraction
 * Improved numerical stability in clustering algorithms
 * Fixed memory leaks in long-running simulations
 
 Breaking Changes:
+
 * Updated API for better consistency and usability
 * Changed default solver parameters for improved performance
 * Modified input file formats for better standardization
@@ -43,6 +47,7 @@ PyEPLAN 0.0.2 (13 Feb 2021)
 **Beta Release**
 
 Features:
+
 * Initial implementation of core modules
 * Basic data processing capabilities
 * Simple routing algorithms
@@ -50,6 +55,7 @@ Features:
 * Support for basic renewable energy sources
 
 Known Issues:
+
 * Limited solver support
 * Basic error handling
 * Minimal documentation
@@ -61,6 +67,7 @@ PyEPLAN 0.0.1 (2020)
 **Alpha Release**
 
 Features:
+
 * Proof-of-concept implementation
 * Basic optimization framework
 * Simple data structures

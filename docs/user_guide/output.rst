@@ -18,17 +18,20 @@ Investment Planning Outputs
 ==========================
 
 **Investment Summary** (`investment_summary.csv`)
+
 * Optimal technology selection and sizing
 * Total investment costs by technology
 * Annualized costs and levelized cost of energy (LCOE)
 * System reliability metrics
 
 **Capacity Expansion Plan** (`capacity_plan.csv`)
+
 * Year-by-year capacity additions
 * Technology mix evolution
 * Geographic distribution of new capacity
 
 **Financial Analysis** (`financial_analysis.csv`)
+
 * Net present value (NPV) calculations
 * Internal rate of return (IRR)
 * Payback period analysis
@@ -38,18 +41,21 @@ Operation Planning Outputs
 =========================
 
 **Hourly Dispatch** (`hourly_dispatch.csv`)
+
 * Generator output for each hour
 * Storage charge/discharge profiles
 * Grid exchange power
 * Reserve allocation
 
 **System Performance** (`system_performance.csv`)
+
 * System reliability metrics
 * Loss of load probability (LOLP)
 * Expected energy not served (EENS)
 * Capacity factor analysis
 
 **Cost Analysis** (`operation_costs.csv`)
+
 * Fuel costs by generator
 * Variable O&M costs
 * Grid exchange costs
@@ -59,12 +65,14 @@ Network Analysis Outputs
 ========================
 
 **Network Configuration** (`network_config.csv`)
+
 * Optimal line connections
 * Line capacities and flows
 * Voltage profiles
 * Loss analysis
 
 **Geographic Visualization** (`network_map.html`)
+
 * Interactive map showing network layout
 * Generator and load locations
 * Line connections and capacities
@@ -82,28 +90,29 @@ PyEPLAN generates outputs in multiple formats:
 Example Output Structure
 ========================
 
-```
-results/
-├── investment_summary.csv
-├── capacity_plan.csv
-├── financial_analysis.csv
-├── hourly_dispatch.csv
-├── system_performance.csv
-├── operation_costs.csv
-├── network_config.csv
-├── plots/
-│   ├── generation_profile.png
-│   ├── cost_breakdown.png
-│   └── network_layout.png
-└── reports/
-    ├── investment_report.xlsx
-    └── operation_report.xlsx
-```
+.. code-block:: text
+
+    results/
+    ├── investment_summary.csv
+    ├── capacity_plan.csv
+    ├── financial_analysis.csv
+    ├── hourly_dispatch.csv
+    ├── system_performance.csv
+    ├── operation_costs.csv
+    ├── network_config.csv
+    ├── plots/
+    │   ├── generation_profile.png
+    │   ├── cost_breakdown.png
+    │   └── network_layout.png
+    └── reports/
+        ├── investment_report.xlsx
+        └── operation_report.xlsx
 
 Interpreting Results
 ===================
 
 **Key Performance Indicators**:
+
 * **LCOE**: Levelized Cost of Energy (USD/kWh)
 * **NPV**: Net Present Value of investment
 * **IRR**: Internal Rate of Return
@@ -111,12 +120,14 @@ Interpreting Results
 * **Capacity Factor**: Average utilization of generators
 
 **Economic Analysis**:
+
 * Compare different technology combinations
 * Assess sensitivity to key parameters
 * Evaluate grid vs. off-grid scenarios
 * Analyze impact of renewable penetration
 
 **Technical Analysis**:
+
 * System reliability assessment
 * Network adequacy evaluation
 * Storage utilization analysis

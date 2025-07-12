@@ -25,27 +25,27 @@ The data processing module handles historical weather data extraction and repres
 * `validate_data()`: Check data quality and consistency
 
 **Example Usage**:
-```python
-from pyeplan import datsys
+.. code-block:: python
 
-# Initialize data processing system
-data_system = datsys()
+    from pyeplan import datsys
 
-# Extract weather data for a location
-weather_data = data_system.extract_weather_data(
-    latitude=1.2921,
-    longitude=36.8219,
-    start_date='2020-01-01',
-    end_date='2020-12-31'
-)
+    # Initialize data processing system
+    data_system = datsys()
 
-# Create representative days
-rep_days = data_system.cluster_representative_days(
-    data=weather_data,
-    n_clusters=5,
-    method='kmeans'
-)
-```
+    # Extract weather data for a location
+    weather_data = data_system.extract_weather_data(
+        latitude=1.2921,
+        longitude=36.8219,
+        start_date='2020-01-01',
+        end_date='2020-12-31'
+    )
+
+    # Create representative days
+    rep_days = data_system.cluster_representative_days(
+        data=weather_data,
+        n_clusters=5,
+        method='kmeans'
+    )
 
 Routing Module
 --------------
@@ -65,24 +65,24 @@ The routing module performs optimal network design using minimum spanning tree a
 * `analyze_network()`: Evaluate network performance metrics
 
 **Example Usage**:
-```python
-from pyeplan import rousys
+.. code-block:: python
 
-# Initialize routing system
-routing_system = rousys()
+    from pyeplan import rousys
 
-# Load node coordinates
-routing_system.load_coordinates('coordinates.csv')
+    # Initialize routing system
+    routing_system = rousys()
 
-# Optimize network design
-network = routing_system.optimize_network(
-    method='mst',
-    cost_function='distance'
-)
+    # Load node coordinates
+    routing_system.load_coordinates('coordinates.csv')
 
-# Analyze results
-results = routing_system.analyze_network(network)
-```
+    # Optimize network design
+    network = routing_system.optimize_network(
+        method='mst',
+        cost_function='distance'
+    )
+
+    # Analyze results
+    results = routing_system.analyze_network(network)
 
 Investment and Operation Planning Module
 ---------------------------------------
@@ -107,31 +107,31 @@ Operation Planning:
 * `unit_commitment()`: Generator start-up/shut-down decisions
 
 **Example Usage**:
-```python
-from pyeplan import inosys
+.. code-block:: python
 
-# Initialize planning system
-planning_system = inosys()
+    from pyeplan import inosys
 
-# Load input data
-planning_system.load_data('input_data.csv')
+    # Initialize planning system
+    planning_system = inosys()
 
-# Run investment planning
-inv_results = planning_system.investment_planning(
-    horizon=10,
-    discount_rate=0.08,
-    reliability_target=0.99
-)
+    # Load input data
+    planning_system.load_data('input_data.csv')
 
-# Run operation planning
-op_results = planning_system.operation_planning(
-    horizon=24,
-    reserve_margin=0.15
-)
+    # Run investment planning
+    inv_results = planning_system.investment_planning(
+        horizon=10,
+        discount_rate=0.08,
+        reliability_target=0.99
+    )
 
-# Analyze results
-planning_system.analyze_results(inv_results, op_results)
-```
+    # Run operation planning
+    op_results = planning_system.operation_planning(
+        horizon=24,
+        reserve_margin=0.15
+    )
+
+    # Analyze results
+    planning_system.analyze_results(inv_results, op_results)
 
 Data Structures
 ==============
@@ -142,16 +142,19 @@ Input Data Format
 PyEPLAN uses standardized CSV formats for input data:
 
 **Component Data**:
+
 * Generator characteristics (capacity, costs, efficiency)
 * Storage system parameters (capacity, efficiency, lifetime)
 * Network line parameters (resistance, reactance, capacity)
 
 **Time Series Data**:
+
 * Load profiles (hourly/daily demand)
 * Renewable generation profiles (solar, wind)
 * Fuel prices and grid tariffs
 
 **Geographic Data**:
+
 * Node coordinates (latitude, longitude)
 * Terrain and accessibility information
 * Climate zone classifications
@@ -160,11 +163,13 @@ Output Data Format
 -----------------
 
 **Results Summary**:
+
 * Optimal technology mix and sizing
 * Total system costs and performance metrics
 * Financial indicators (NPV, IRR, LCOE)
 
 **Detailed Results**:
+
 * Hourly dispatch schedules
 * Network flows and losses
 * Reliability and adequacy metrics
@@ -173,16 +178,19 @@ Configuration Parameters
 ========================
 
 **General Parameters**:
+
 * `planning_horizon`: Time horizon for investment planning (years)
 * `discount_rate`: Discount rate for financial calculations
 * `reliability_target`: Target system reliability level
 
 **Technical Parameters**:
+
 * `reserve_margin`: Reserve capacity requirement
 * `voltage_limits`: Acceptable voltage deviation range
 * `line_capacity`: Maximum line loading limits
 
 **Economic Parameters**:
+
 * `fuel_prices`: Fuel cost projections
 * `technology_costs`: Capital cost assumptions
 * `grid_tariffs`: Grid exchange price structure
@@ -198,31 +206,34 @@ PyEPLAN includes comprehensive error handling for:
 * **Memory Issues**: Large-scale problem memory management
 
 **Example Error Handling**:
-```python
-try:
-    results = planning_system.investment_planning()
-except ValueError as e:
-    print(f"Data validation error: {e}")
-except RuntimeError as e:
-    print(f"Optimization error: {e}")
-except MemoryError as e:
-    print(f"Memory limit exceeded: {e}")
-```
+.. code-block:: python
+
+    try:
+        results = planning_system.investment_planning()
+    except ValueError as e:
+        print(f"Data validation error: {e}")
+    except RuntimeError as e:
+        print(f"Optimization error: {e}")
+    except MemoryError as e:
+        print(f"Memory limit exceeded: {e}")
 
 Performance Considerations
 =========================
 
 **Large-Scale Problems**:
+
 * Use representative day clustering to reduce problem size
 * Implement decomposition techniques for multi-year planning
 * Consider parallel processing for scenario analysis
 
 **Memory Management**:
+
 * Monitor memory usage for large networks
 * Use sparse matrix representations where possible
 * Implement data streaming for large time series
 
 **Solver Selection**:
+
 * Commercial solvers (Gurobi, CPLEX) for large problems
 * Open-source solvers (GLPK, CBC) for smaller problems
 * Consider solver-specific parameter tuning

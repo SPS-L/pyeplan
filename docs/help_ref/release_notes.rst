@@ -70,6 +70,7 @@ Development Roadmap
 ==================
 
 **Upcoming Features (v1.1.0)**:
+
 * Real-time optimization capabilities
 * Advanced uncertainty modeling
 * Integration with external data sources
@@ -77,6 +78,7 @@ Development Roadmap
 * Support for energy storage optimization
 
 **Future Plans (v2.0.0)**:
+
 * Multi-objective optimization
 * Advanced machine learning integration
 * Cloud-based deployment options
@@ -87,12 +89,14 @@ Migration Guide
 ==============
 
 **From v0.0.2 to v1.0.0**:
+
 * Update import statements to use new module structure
 * Modify input file formats to match new standards
 * Update solver configuration parameters
 * Review and update custom scripts for API changes
 
 **From v0.0.1 to v1.0.0**:
+
 * Complete rewrite required due to major architectural changes
 * New data processing pipeline
 * Updated optimization framework

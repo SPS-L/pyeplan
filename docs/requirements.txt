@@ -1,9 +1,9 @@
+# Documentation-specific dependencies
+# Core dependencies are installed from ../requirements.txt
 setuptools
 sphinx 
 sphinx_rtd_theme
-scipy
-numpy
-matplotlib
-pyeplan
 sphinxcontrib-bibtex<2.0.0
-ipython
+
+# Note: Core PyEPlan dependencies (numpy, scipy, matplotlib, etc.) 
+# are installed from the root requirements.txt file

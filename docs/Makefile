@@ -1,5 +1,8 @@
 # Makefile for Sphinx documentation
 #
+# Note: This documentation build assumes that PyEPlan and its dependencies
+# are installed from the root requirements.txt file (../requirements.txt)
+#
 
 # You can set these variables from the command line.
 SPHINXOPTS    =

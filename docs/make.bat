@@ -1,6 +1,8 @@
 @ECHO OFF
 
 REM Command file for Sphinx documentation
+REM Note: This documentation build assumes that PyEPlan and its dependencies
+REM are installed from the root requirements.txt file (../requirements.txt)
 
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build

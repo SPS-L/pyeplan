@@ -45,8 +45,13 @@ class TestDatsys(unittest.TestCase):
             'Longitude': [32.40, 32.41, 32.42]
         })
         
+        # Add 24 columns for hourly load data (D:AA)
+        for i in range(24):
+            load_data[f'Hour_{i}'] = [10 + i, 15 + i, 20 + i]
+        
         load_levels = pd.DataFrame({
-            'Load Level': [50, 75, 100]
+            'Load Level': [50, 75, 100],
+            'Renewable': [25, 35, 45]  # Add a second column for prep data
         })
         
         # Create Excel file with multiple sheets
@@ -57,9 +62,9 @@ class TestDatsys(unittest.TestCase):
     @patch('urllib.request.urlopen')
     def test_init_basic_parameters(self, mock_urlopen):
         """Test datsys initialization with basic parameters."""
-        # Mock PVGIS API response
+        # Mock PVGIS 5.3 API response
         mock_response = MagicMock()
-        mock_response.read.return_value = b"Time,P,G(i),H_sun,T2m,WS10m,Int\n2020-01-01 00:00:00,0,0,0,25,2,0\n"
+        mock_response.read.return_value = b'{"outputs": {"hourly": [{"time": "2020-01-01 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0}]}}'
         mock_urlopen.return_value = mock_response
         
         # Test basic initialization
@@ -94,9 +99,9 @@ class TestDatsys(unittest.TestCase):
     @patch('urllib.request.urlopen')
     def test_init_default_parameters(self, mock_urlopen):
         """Test datsys initialization with default parameters."""
-        # Mock PVGIS API response
+        # Mock PVGIS 5.3 API response
         mock_response = MagicMock()
-        mock_response.read.return_value = b"Time,P,G(i),H_sun,T2m,WS10m,Int\n2020-01-01 00:00:00,0,0,0,25,2,0\n"
+        mock_response.read.return_value = b'{"outputs": {"hourly": [{"time": "2020-01-01 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0}]}}'
         mock_urlopen.return_value = mock_response
         
         # Test with default parameters
@@ -112,15 +117,15 @@ class TestDatsys(unittest.TestCase):
         self.assertEqual(data_sys.trackingtype, 2)
         self.assertEqual(data_sys.optimalinclination, 1)
         self.assertEqual(data_sys.optimalangles, 1)
-        self.assertEqual(data_sys.outputformat, 'basic')
+        self.assertEqual(data_sys.outputformat, 'json')  # Updated default for PVGIS 5.3
         self.assertEqual(data_sys.browser, 1)
 
     @patch('urllib.request.urlopen')
     def test_pvgis_api_url_construction(self, mock_urlopen):
-        """Test PVGIS API URL construction."""
-        # Mock PVGIS API response
+        """Test PVGIS 5.3 API URL construction."""
+        # Mock PVGIS 5.3 API response
         mock_response = MagicMock()
-        mock_response.read.return_value = b"Time,P,G(i),H_sun,T2m,WS10m,Int\n2020-01-01 00:00:00,0,0,0,25,2,0\n"
+        mock_response.read.return_value = b'{"outputs": {"hourly": [{"time": "2020-01-01 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0}]}}'
         mock_urlopen.return_value = mock_response
         
         data_sys = datsys(
@@ -133,8 +138,9 @@ class TestDatsys(unittest.TestCase):
             sys_loss=14
         )
         
-        # Check that URL contains expected parameters
+        # Check that URL contains expected PVGIS 5.3 parameters
         expected_url_parts = [
+            'api/v5_3/seriescalc',  # New API endpoint
             'lat=0.25',
             'lon=32.40',
             'startyear=2020',
@@ -145,8 +151,23 @@ class TestDatsys(unittest.TestCase):
             'trackingtype=2',
             'optimalinclination=1',
             'optimalangles=1',
-            'outputformat=basic',
-            'browser=1'
+            'outputformat=json',  # Default format for PVGIS 5.3
+            'browser=1',
+            'raddatabase=PVGIS-SARAH2',  # New parameter
+            'components=1',  # New parameter
+            'horirrad=1',  # New parameter
+            'optrad=1',  # New parameter
+            'selectrad=1',  # New parameter
+            'usehorizon=1',  # New parameter
+            'showtemperatures=1',  # New parameter
+            'temp2m=1',  # New parameter
+            'wind_speed=1',  # New parameter
+            'wind_speed_height=10',  # New parameter
+            'albedo=0.2',  # New parameter
+            'mountingplace=free',  # New parameter
+            'angle=0',  # New parameter
+            'aspect=0',  # New parameter
+            'technology=crystSi'  # New parameter
         ]
         
         for part in expected_url_parts:
@@ -155,9 +176,19 @@ class TestDatsys(unittest.TestCase):
     @patch('urllib.request.urlopen')
     def test_data_extract_pvcalc_1(self, mock_urlopen):
         """Test data extraction with pvcalc=1 (power + radiation)."""
-        # Mock PVGIS API response with power data
+        # Mock PVGIS 5.3 API response with power data
+        json_response = {
+            "outputs": {
+                "hourly": [
+                    {"time": "2020-01-02 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0},
+                    {"time": "2020-01-02 01:00:00", "P": 10, "G(i)": 100, "H_sun": 10, "T2m": 26, "WS10m": 3, "Int": 0},
+                    {"time": "2020-01-02 02:00:00", "P": 20, "G(i)": 200, "H_sun": 20, "T2m": 27, "WS10m": 4, "Int": 0}
+                ]
+            }
+        }
+        import json
         mock_response = MagicMock()
-        mock_response.read.return_value = b"Time,P,G(i),H_sun,T2m,WS10m,Int\n2020-01-02 00:00:00,0,0,0,25,2,0\n2020-01-02 01:00:00,10,100,10,26,3,0\n2020-01-02 02:00:00,20,200,20,27,4,0\n"
+        mock_response.read.return_value = json.dumps(json_response).encode('utf-8')
         mock_urlopen.return_value = mock_response
         
         data_sys = datsys(
@@ -180,9 +211,19 @@ class TestDatsys(unittest.TestCase):
     @patch('urllib.request.urlopen')
     def test_data_extract_pvcalc_0(self, mock_urlopen):
         """Test data extraction with pvcalc=0 (radiation only)."""
-        # Mock PVGIS API response with radiation data only
+        # Mock PVGIS 5.3 API response with radiation data only
+        json_response = {
+            "outputs": {
+                "hourly": [
+                    {"time": "2020-01-02 00:00:00", "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0},
+                    {"time": "2020-01-02 01:00:00", "G(i)": 100, "H_sun": 10, "T2m": 26, "WS10m": 3, "Int": 0},
+                    {"time": "2020-01-02 02:00:00", "G(i)": 200, "H_sun": 20, "T2m": 27, "WS10m": 4, "Int": 0}
+                ]
+            }
+        }
+        import json
         mock_response = MagicMock()
-        mock_response.read.return_value = b"Time,G(i),H_sun,T2m,WS10m,Int\n2020-01-02 00:00:00,0,0,25,2,0\n2020-01-02 01:00:00,100,10,26,3,0\n2020-01-02 02:00:00,200,20,27,4,0\n"
+        mock_response.read.return_value = json.dumps(json_response).encode('utf-8')
         mock_urlopen.return_value = mock_response
         
         data_sys = datsys(
@@ -206,9 +247,19 @@ class TestDatsys(unittest.TestCase):
     @patch('urllib.request.urlopen')
     def test_kmeans_clustering(self, mock_urlopen):
         """Test K-means clustering functionality."""
-        # Mock PVGIS API response
+        # Mock PVGIS 5.3 API response
+        json_response = {
+            "outputs": {
+                "hourly": [
+                    {"time": "2020-01-02 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0},
+                    {"time": "2020-01-02 01:00:00", "P": 10, "G(i)": 100, "H_sun": 10, "T2m": 26, "WS10m": 3, "Int": 0},
+                    {"time": "2020-01-02 02:00:00", "P": 20, "G(i)": 200, "H_sun": 20, "T2m": 27, "WS10m": 4, "Int": 0}
+                ]
+            }
+        }
+        import json
         mock_response = MagicMock()
-        mock_response.read.return_value = b"Time,P,G(i),H_sun,T2m,WS10m,Int\n2020-01-02 00:00:00,0,0,0,25,2,0\n2020-01-02 01:00:00,10,100,10,26,3,0\n2020-01-02 02:00:00,20,200,20,27,4,0\n"
+        mock_response.read.return_value = json.dumps(json_response).encode('utf-8')
         mock_urlopen.return_value = mock_response
         
         data_sys = datsys(
@@ -242,9 +293,9 @@ class TestDatsys(unittest.TestCase):
     @patch('urllib.request.urlopen')
     def test_file_generation(self, mock_urlopen):
         """Test that all required files are generated during initialization."""
-        # Mock PVGIS API response
+        # Mock PVGIS 5.3 API response
         mock_response = MagicMock()
-        mock_response.read.return_value = b"Time,P,G(i),H_sun,T2m,WS10m,Int\n2020-01-02 00:00:00,0,0,0,25,2,0\n"
+        mock_response.read.return_value = b'{"outputs": {"hourly": [{"time": "2020-01-02 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0}]}}'
         mock_urlopen.return_value = mock_response
         
         data_sys = datsys(inp_folder=self.test_dir)
@@ -265,9 +316,9 @@ class TestDatsys(unittest.TestCase):
     @patch('urllib.request.urlopen')
     def test_timezone_detection(self, mock_urlopen):
         """Test timezone detection functionality."""
-        # Mock PVGIS API response
+        # Mock PVGIS 5.3 API response
         mock_response = MagicMock()
-        mock_response.read.return_value = b"Time,P,G(i),H_sun,T2m,WS10m,Int\n2020-01-02 00:00:00,0,0,0,25,2,0\n"
+        mock_response.read.return_value = b'{"outputs": {"hourly": [{"time": "2020-01-02 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0}]}}'
         mock_urlopen.return_value = mock_response
         
         data_sys = datsys(
@@ -288,9 +339,9 @@ class TestDatsys(unittest.TestCase):
     @patch('urllib.request.urlopen')
     def test_power_factor_calculations(self, mock_urlopen):
         """Test power factor calculations for active and reactive power."""
-        # Mock PVGIS API response
+        # Mock PVGIS 5.3 API response
         mock_response = MagicMock()
-        mock_response.read.return_value = b"Time,P,G(i),H_sun,T2m,WS10m,Int\n2020-01-02 00:00:00,0,0,0,25,2,0\n"
+        mock_response.read.return_value = b'{"outputs": {"hourly": [{"time": "2020-01-02 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0}]}}'
         mock_urlopen.return_value = mock_response
         
         data_sys = datsys(
@@ -306,6 +357,173 @@ class TestDatsys(unittest.TestCase):
         # Check that dataframes have correct shapes
         self.assertEqual(data_sys.prep.shape, data_sys.qrep.shape)
         self.assertEqual(data_sys.pdem.shape, data_sys.qdem.shape)
+
+    @patch('urllib.request.urlopen')
+    def test_pvgis_53_json_response_handling(self, mock_urlopen):
+        """Test handling of PVGIS 5.3 JSON response format."""
+        # Mock PVGIS 5.3 JSON response
+        json_response = {
+            "outputs": {
+                "hourly": [
+                    {
+                        "time": "2020-01-01 00:00:00",
+                        "P": 0,
+                        "G(i)": 0,
+                        "H_sun": 0,
+                        "T2m": 25,
+                        "WS10m": 2,
+                        "Int": 0
+                    },
+                    {
+                        "time": "2020-01-01 01:00:00",
+                        "P": 10,
+                        "G(i)": 100,
+                        "H_sun": 10,
+                        "T2m": 26,
+                        "WS10m": 3,
+                        "Int": 0
+                    }
+                ]
+            }
+        }
+        
+        import json
+        mock_response = MagicMock()
+        mock_response.read.return_value = json.dumps(json_response).encode('utf-8')
+        mock_urlopen.return_value = mock_response
+        
+        data_sys = datsys(
+            inp_folder=self.test_dir,
+            lat=0.25,
+            lon=32.40,
+            year=2020
+        )
+        
+        # Check that JSON data was parsed correctly
+        self.assertIsNotNone(data_sys.data)
+        self.assertIn('time', data_sys.data.columns)
+        self.assertIn('P', data_sys.data.columns)
+        self.assertIn('G(i)', data_sys.data.columns)
+        self.assertIn('WS10m', data_sys.data.columns)
+
+    @patch('urllib.request.urlopen')
+    def test_automatic_database_selection(self, mock_urlopen):
+        """Test automatic radiation database selection based on location."""
+        # Mock PVGIS 5.3 API response
+        mock_response = MagicMock()
+        mock_response.read.return_value = b'{"outputs": {"hourly": [{"time": "2020-01-01 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0}]}}'
+        mock_urlopen.return_value = mock_response
+        
+        # Test SARAH2 database selection for global coverage
+        data_sys_sarah2 = datsys(
+            inp_folder=self.test_dir,
+            lat=0.25,  # Within SARAH2 coverage
+            lon=32.40
+        )
+        self.assertIn('raddatabase=PVGIS-SARAH2', data_sys_sarah2.data_link)
+        
+        # Test ERA5 database selection for regions outside SARAH2 coverage
+        data_sys_era5 = datsys(
+            inp_folder=self.test_dir,
+            lat=70.0,  # Outside SARAH2 coverage
+            lon=32.40
+        )
+        self.assertIn('raddatabase=PVGIS-ERA5', data_sys_era5.data_link)
+
+    @patch('urllib.request.urlopen')
+    def test_manual_database_selection(self, mock_urlopen):
+        """Test manual radiation database selection."""
+        # Mock PVGIS 5.3 API response
+        mock_response = MagicMock()
+        mock_response.read.return_value = b'{"outputs": {"hourly": [{"time": "2020-01-01 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0}]}}'
+        mock_urlopen.return_value = mock_response
+        
+        # Test manual database selection
+        data_sys = datsys(
+            inp_folder=self.test_dir,
+            lat=0.25,
+            lon=32.40,
+            raddatabase='PVGIS-NSRDB'
+        )
+        self.assertIn('raddatabase=PVGIS-NSRDB', data_sys.data_link)
+
+    @patch('urllib.request.urlopen')
+    def test_column_name_normalization(self, mock_urlopen):
+        """Test column name normalization for PVGIS 5.3."""
+        # Mock PVGIS 5.3 JSON response with alternative column names
+        json_response = {
+            "outputs": {
+                "hourly": [
+                    {
+                        "time": "2020-01-01 00:00:00",
+                        "P": 0,
+                        "G_i": 0,  # Alternative column name
+                        "H_sun": 0,
+                        "T_2m": 25,  # Alternative column name
+                        "WS_10m": 2,  # Alternative column name
+                        "Int": 0
+                    }
+                ]
+            }
+        }
+        
+        import json
+        mock_response = MagicMock()
+        mock_response.read.return_value = json.dumps(json_response).encode('utf-8')
+        mock_urlopen.return_value = mock_response
+        
+        data_sys = datsys(
+            inp_folder=self.test_dir,
+            lat=0.25,
+            lon=32.40,
+            year=2020
+        )
+        
+        # Check that column names were normalized
+        self.assertIn('G(i)', data_sys.data.columns)
+        self.assertIn('T2m', data_sys.data.columns)
+        self.assertIn('WS10m', data_sys.data.columns)
+
+    @patch('urllib.request.urlopen')
+    def test_error_handling_pvgis_53(self, mock_urlopen):
+        """Test error handling for PVGIS 5.3 API errors."""
+        # Mock HTTP error response
+        mock_urlopen.side_effect = urllib.error.HTTPError(
+            url="https://re.jrc.ec.europa.eu/api/v5_3/seriescalc",
+            code=400,
+            msg="Bad Request",
+            hdrs={},
+            fp=None
+        )
+        
+        with self.assertRaises(urllib.error.HTTPError):
+            datsys(inp_folder=self.test_dir, lat=0.25, lon=32.40)
+
+    @patch('urllib.request.urlopen')
+    def test_validation_method(self, mock_urlopen):
+        """Test the _validate_output_format method."""
+        # Mock PVGIS 5.3 API response
+        mock_response = MagicMock()
+        mock_response.read.return_value = b'{"outputs": {"hourly": [{"time": "2020-01-01 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0}]}}'
+        mock_urlopen.return_value = mock_response
+        
+        data_sys = datsys(
+            inp_folder=self.test_dir,
+            lat=0.25,
+            lon=32.40,
+            year=2020,
+            n_clust=2
+        )
+        
+        # Extract data and perform clustering
+        data_sys.data_extract()
+        data_sys.kmeans_clust()
+        
+        # Test validation method
+        data_sys._validate_output_format()
+        
+        # Check that validation passed (no exception raised)
+        self.assertTrue(True)  # If we reach here, validation passed
 
 
 class TestDatsysIntegration(unittest.TestCase):
@@ -323,9 +541,19 @@ class TestDatsysIntegration(unittest.TestCase):
     @patch('urllib.request.urlopen')
     def test_with_real_example_data(self, mock_urlopen):
         """Test datsys with real example data from 5_bus case."""
-        # Mock PVGIS API response
+        # Mock PVGIS 5.3 API response
+        json_response = {
+            "outputs": {
+                "hourly": [
+                    {"time": "2020-01-02 00:00:00", "P": 0, "G(i)": 0, "H_sun": 0, "T2m": 25, "WS10m": 2, "Int": 0},
+                    {"time": "2020-01-02 01:00:00", "P": 10, "G(i)": 100, "H_sun": 10, "T2m": 26, "WS10m": 3, "Int": 0},
+                    {"time": "2020-01-02 02:00:00", "P": 20, "G(i)": 200, "H_sun": 20, "T2m": 27, "WS10m": 4, "Int": 0}
+                ]
+            }
+        }
+        import json
         mock_response = MagicMock()
-        mock_response.read.return_value = b"Time,P,G(i),H_sun,T2m,WS10m,Int\n2020-01-02 00:00:00,0,0,0,25,2,0\n2020-01-02 01:00:00,10,100,10,26,3,0\n2020-01-02 02:00:00,20,200,20,27,4,0\n"
+        mock_response.read.return_value = json.dumps(json_response).encode('utf-8')
         mock_urlopen.return_value = mock_response
         
         # Test with real example data

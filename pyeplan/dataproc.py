@@ -91,7 +91,7 @@ class datsys:
         kmeans_clust(): Perform K-means clustering on time series data
     """
     
-    def __init__(self, inp_folder = '', lat = 0.251148605450955, lon = 32.404833929733,year = 2016, pvcalc = 1, pp = 50, sys_loss = 14, n_clust = 1, pf_c = 1, pf_p = 1, sbase = 1000):
+    def __init__(self, inp_folder = '', lat = 0.251148605450955, lon = 32.404833929733,year = 2016, pvcalc = 1, pp = 50, sys_loss = 14, n_clust = 1, pf_c = 1, pf_p = 1, sbase = 1000, raddatabase = None):
         """
         Initialize the data processing system.
         
@@ -109,12 +109,15 @@ class datsys:
             pf_c (float): Power factor at consumption points (default: 1)
             pf_p (float): Power factor at production points (default: 1)
             sbase (float): Base apparent power in kW (default: 1000)
+            raddatabase (str, optional): Radiation database to use. If None, automatically selected based on location.
+                                        Options: 'PVGIS-SARAH2', 'PVGIS-ERA5', 'PVGIS-NSRDB'
         
         Required input files:
             - mgpc_dist.xlsx: Load point and load level data
         
-        The PVGIS tool (https://ec.europa.eu/jrc/en/pvgis) is used to collect
+        The PVGIS 5.3 tool (https://ec.europa.eu/jrc/en/pvgis) is used to collect
         renewable production data sets at different locations across the world.
+        The API now supports multiple radiation databases including SARAH2, ERA5, and NSRDB.
         
         Example:
             >>> data_sys = datsys("input_folder", lat=0.25, lon=32.40, year=2016)
@@ -173,7 +176,7 @@ class datsys:
         '''
         
         #Type of output.
-        self.outputformat = 'basic' 
+        self.outputformat = 'json'  # Default to JSON for PVGIS 5.3
         ''' 
         Choices: 
         "csv"  
@@ -200,26 +203,100 @@ class datsys:
         #Base apparent power 
         self.sbase = sbase
         
-        #Data extraction from PVGIS
-        self.data_link = 'https://re.jrc.ec.europa.eu/api/seriescalc'
-        self.data_link = self.data_link + '?lat=' + str(self.lat) + '&lon=' + str(self.lon) 
-        self.data_link = self.data_link + '&startyear=' + str(self.startyear) + '&endyear=' + str(self.endyear) 
-        self.data_link = self.data_link + '&pvcalculation=' + str(self.pvcalculation) + '&peakpower=' + str(self.peakpower) 
-        self.data_link = self.data_link + '&loss=' + str(self.loss) + '&trackingtype=' + str(self.trackingtype)
-        self.data_link = self.data_link + '&optimalinclination=' + str(self.optimalinclination) + '&optimalangles=' + str(self.optimalangles)
-        self.data_link = self.data_link + '&outputformat=' + self.outputformat + '&browser=' + str(self.browser)
-        self.data = pd.read_csv(urllib.request.urlopen(self.data_link), skiprows=2, header=None) 
+        #Data extraction from PVGIS 5.3
+        # New PVGIS 5.3 API endpoint
+        self.data_link = 'https://re.jrc.ec.europa.eu/api/v5_3/seriescalc'
+        
+        # Build query parameters for PVGIS 5.3
+        # Determine appropriate radiation database based on location
+        if raddatabase is None:
+            if -60 <= self.lat <= 65 and -180 <= self.lon <= 180:  # Global coverage
+                raddatabase = 'PVGIS-SARAH2'
+            else:
+                raddatabase = 'PVGIS-ERA5'  # Fallback for other regions
+        
+        params = {
+            'lat': self.lat,
+            'lon': self.lon,
+            'startyear': self.startyear,
+            'endyear': self.endyear,
+            'pvcalculation': self.pvcalculation,
+            'peakpower': self.peakpower,
+            'loss': self.loss,
+            'trackingtype': self.trackingtype,
+            'angle': 0,  # default, not relevant for 2-axis tracking
+            'aspect': 0,  # default, not relevant for tracking
+            'optimalinclination': self.optimalinclination,
+            'optimalangles': self.optimalangles,
+            'raddatabase': raddatabase,
+            'components': 1,  # outputs beam, diffuse, reflected if 1
+            'usehorizon': 1,
+            'outputformat': self.outputformat,
+            'browser': self.browser,
+            'pvtechchoice': 'crystSi',
+            'mountingplace': 'free',
+        }
+        
+        # Build URL with parameters
+        query_string = '&'.join([f'{k}={v}' for k, v in params.items()])
+        self.data_link = f'{self.data_link}?{query_string}'
+        
+        # Fetch data from PVGIS 5.3 API
+        try:
+            response = urllib.request.urlopen(self.data_link)
+            response_text = response.read().decode('utf-8')
+            
+            # Check if response contains an error message
+            if 'error' in response_text.lower() or 'exception' in response_text.lower():
+                print(f"PVGIS 5.3 API Error: {response_text}")
+                raise ValueError(f"PVGIS 5.3 API returned an error: {response_text}")
+            
+            # PVGIS 5.3 returns JSON by default, so we need to handle it differently
+            if self.outputformat == 'json':
+                import json
+                data_json = json.loads(response_text)
+                # Convert JSON to DataFrame format
+                if 'outputs' in data_json and 'hourly' in data_json['outputs']:
+                    hourly_data = data_json['outputs']['hourly']
+                    # Convert to DataFrame format compatible with existing code
+                    self.data = pd.DataFrame(hourly_data)
+                    
+                    # Handle potential column name variations in PVGIS 5.3
+                    self._normalize_column_names()
+                else:
+                    raise ValueError("Invalid JSON response format from PVGIS 5.3")
+            else:
+                # For CSV format, read as before but with updated column structure
+                self.data = pd.read_csv(urllib.request.urlopen(self.data_link), skiprows=2, header=None)
+        except urllib.error.HTTPError as e:
+            print(f"HTTP Error {e.code}: {e.reason}")
+            print(f"URL: {self.data_link}")
+            raise
+        except Exception as e:
+            print(f"Error fetching data from PVGIS 5.3: {e}")
+            print(f"URL: {self.data_link}")
+            raise 
     
         '''
-        Data columns description as described by PVGIS:
+        Data columns description for PVGIS 5.3:
             
-        Time = Date and hour
-        P = PV system power (W) ** Column not included if pvcalc = 0
-        G(i) = Global irradiance on the inclined plane (plane of the array) (W/m2)
-        H_sun = Sun height (degree)
-        T2m = 2-m air temperature (degree Celsius)
-        WS10m = 10-m total wind speed (m/s)
-        Int = 1 means solar radiation values are reconstructed
+        For JSON format:
+        - time: Date and hour
+        - P: PV system power (W) ** Column not included if pvcalc = 0
+        - G(i): Global irradiance on the inclined plane (plane of the array) (W/m2)
+        - H_sun: Sun height (degree)
+        - T2m: 2-m air temperature (degree Celsius)
+        - WS10m: 10-m total wind speed (m/s)
+        - Int: 1 means solar radiation values are reconstructed
+        
+        For CSV format (columns may vary based on parameters):
+        - Column 0: Time
+        - Column 1: P (if pvcalc = 1)
+        - Column 2: G(i)
+        - Column 3: H_sun
+        - Column 4: T2m
+        - Column 5: WS10m
+        - Column 6: Int
         
         '''
         
@@ -290,43 +367,108 @@ class datsys:
         date_local[1] = pd.to_datetime(date_local[0], format='%Y:%M:%D').dt.date
         date_local[2] = pd.to_datetime(date_local[0], format='%Y:%M:%D').dt.time
         
-        if self.pvcalculation == 1:
-            #Add to data 
-            self.data[7] = date_local[0]
-            self.data[8] = date_local[1]
-            self.data[9] = date_local[2]
-    
-            #Extract 
-            ext = (self.data[7] >= str(self.startyear) + '-1-2 00:00:00') & (self.data[7] <= str(self.endyear) + '-12-30 23:00:00')
-            self.data_local_time = self.data.loc[ext]
-            
-            #Extracting PV power
-            self.PV_power = pd.pivot(self.data_local_time, index=8, columns=9, values=1) 
-            
-            #Extracting solar irradiance data
-            self.sol_irrad = pd.pivot(self.data_local_time, index=8, columns=9, values=2) 
-            
-            #Extracting wind speed data
-            self.wind_speed = pd.pivot(self.data_local_time, index=8, columns=9, values=5) 
+        # Handle PVGIS 5.3 data format
+        if self.outputformat == 'json':
+            # For JSON format, data is already structured
+            if self.pvcalculation == 1:
+                # Convert time column to datetime
+                self.data['time'] = pd.to_datetime(self.data['time'])
+                self.data['date'] = self.data['time'].dt.date
+                self.data['hour'] = self.data['time'].dt.time
+                
+                # Extract data for the specified year range
+                ext = (self.data['time'] >= str(self.startyear) + '-01-01') & (self.data['time'] <= str(self.endyear) + '-12-31')
+                self.data_local_time = self.data.loc[ext]
+                
+                # Check available columns and extract data accordingly
+                available_cols = self.data_local_time.columns.tolist()
+                print(f"Available columns in PVGIS 5.3 data: {available_cols}")
+                
+                # Extracting PV power (column 'P' in PVGIS 5.3)
+                if 'P' in available_cols:
+                    self.PV_power = pd.pivot(self.data_local_time, index='date', columns='hour', values='P')
+                else:
+                    raise ValueError("PV power column 'P' not found in PVGIS 5.3 response")
+                
+                # Extracting solar irradiance data (column 'G(i)' in PVGIS 5.3)
+                if 'G(i)' in available_cols:
+                    self.sol_irrad = pd.pivot(self.data_local_time, index='date', columns='hour', values='G(i)')
+                else:
+                    raise ValueError("Solar irradiance column 'G(i)' not found in PVGIS 5.3 response")
+                
+                # Extracting wind speed data (column 'WS10m' in PVGIS 5.3)
+                if 'WS10m' in available_cols:
+                    self.wind_speed = pd.pivot(self.data_local_time, index='date', columns='hour', values='WS10m')
+                else:
+                    raise ValueError("Wind speed column 'WS10m' not found in PVGIS 5.3 response")
+                
+                power_chrono = pd.DataFrame(self.PV_power/self.sbase)
+                power_chrono.to_csv(self.inp_folder + os.sep + 'power_chrono.csv', index=False)
+                
+            else:  # pvcalculation == 0
+                # Convert time column to datetime
+                self.data['time'] = pd.to_datetime(self.data['time'])
+                self.data['date'] = self.data['time'].dt.date
+                self.data['hour'] = self.data['time'].dt.time
+                
+                # Extract data for the specified year range
+                ext = (self.data['time'] >= str(self.startyear) + '-01-01') & (self.data['time'] <= str(self.endyear) + '-12-31')
+                self.data_local_time = self.data.loc[ext]
+                
+                # Check available columns and extract data accordingly
+                available_cols = self.data_local_time.columns.tolist()
+                print(f"Available columns in PVGIS 5.3 data (pvcalc=0): {available_cols}")
+                
+                # Extracting solar irradiance data (column 'G(i)' in PVGIS 5.3)
+                if 'G(i)' in available_cols:
+                    self.sol_irrad = pd.pivot(self.data_local_time, index='date', columns='hour', values='G(i)')
+                else:
+                    raise ValueError("Solar irradiance column 'G(i)' not found in PVGIS 5.3 response")
+                
+                # Extracting wind speed data (column 'WS10m' in PVGIS 5.3)
+                if 'WS10m' in available_cols:
+                    self.wind_speed = pd.pivot(self.data_local_time, index='date', columns='hour', values='WS10m')
+                else:
+                    raise ValueError("Wind speed column 'WS10m' not found in PVGIS 5.3 response")
+        else:
+            # For CSV format, use the original column-based approach
+            if self.pvcalculation == 1:
+                #Add to data 
+                self.data[7] = date_local[0]
+                self.data[8] = date_local[1]
+                self.data[9] = date_local[2]
         
-            power_chrono = pd.DataFrame(self.PV_power/self.sbase)
-            power_chrono.to_csv(self.inp_folder + os.sep + 'power_chrono.csv',index = False)
+                #Extract 
+                ext = (self.data[7] >= str(self.startyear) + '-1-2 00:00:00') & (self.data[7] <= str(self.endyear) + '-12-30 23:00:00')
+                self.data_local_time = self.data.loc[ext]
+                
+                #Extracting PV power
+                self.PV_power = pd.pivot(self.data_local_time, index=8, columns=9, values=1) 
+                
+                #Extracting solar irradiance data
+                self.sol_irrad = pd.pivot(self.data_local_time, index=8, columns=9, values=2) 
+                
+                #Extracting wind speed data
+                self.wind_speed = pd.pivot(self.data_local_time, index=8, columns=9, values=5) 
             
-        if self.pvcalculation == 0:
-            #Add to data 
-            self.data[6] = date_local[0]
-            self.data[7] = date_local[1]
-            self.data[8] = date_local[2]
-    
-            #Extract 
-            ext = (self.data[6] >= str(self.startyear) + '-1-2 00:00:00') & (self.data[6] <= str(self.endyear) + '-12-30 23:00:00')
-            self.data_local_time = self.data.loc[ext]
-            
-            #Extracting solar irradiance data 
-            self.sol_irrad = pd.pivot(self.data_local_time, index=7, columns=8, values=1) 
-            
-            #Extracting wind speed data
-            self.wind_speed = pd.pivot(self.data_local_time, index=7, columns=8, values=4) 
+                power_chrono = pd.DataFrame(self.PV_power/self.sbase)
+                power_chrono.to_csv(self.inp_folder + os.sep + 'power_chrono.csv',index = False)
+                
+            if self.pvcalculation == 0:
+                #Add to data 
+                self.data[6] = date_local[0]
+                self.data[7] = date_local[1]
+                self.data[8] = date_local[2]
+        
+                #Extract 
+                ext = (self.data[6] >= str(self.startyear) + '-1-2 00:00:00') & (self.data[6] <= str(self.endyear) + '-12-30 23:00:00')
+                self.data_local_time = self.data.loc[ext]
+                
+                #Extracting solar irradiance data 
+                self.sol_irrad = pd.pivot(self.data_local_time, index=7, columns=8, values=1) 
+                
+                #Extracting wind speed data
+                self.wind_speed = pd.pivot(self.data_local_time, index=7, columns=8, values=4) 
     
     def kmeans_clust(self):
         """
@@ -366,15 +508,19 @@ class datsys:
         kmeans = KMeans(n_clusters=self.n_clust, init='k-means++')
     
         #Fitting the k-means algorithm on data
-        model_PV_power = kmeans.fit(self.PV_power)
-        PV_centers = model_PV_power.cluster_centers_
-        
-        PV_labels = model_PV_power.labels_
+        if self.pvcalculation == 1:
+            model_PV_power = kmeans.fit(self.PV_power)
+            PV_centers = model_PV_power.cluster_centers_
+            PV_labels = model_PV_power.labels_
+        else:
+            # When pvcalculation == 0, use solar irradiance for PV power estimation
+            model_PV_power = kmeans.fit(self.sol_irrad)
+            PV_centers = model_PV_power.cluster_centers_
+            PV_labels = model_PV_power.labels_
+            
         model_sol_irrad = kmeans.fit(self.sol_irrad)
-        
         irrad_centers = model_sol_irrad.cluster_centers_
         model_wind_speed = kmeans.fit(self.wind_speed)
-    
         wind_centers = model_wind_speed.cluster_centers_
         
         ini_dtim = [sum(PV_labels == n) for n in range(self.n_clust)]
@@ -403,3 +549,90 @@ class datsys:
         qwin.to_csv(self.inp_folder + os.sep + 'qwin_dist.csv', index = False)
         
         dtim.to_csv(self.inp_folder + os.sep + 'dtim_dist.csv', index = False)
+        
+        # Validate output data format for compatibility with investoper.py
+        self._validate_output_format()
+    
+    def _validate_output_format(self):
+        """
+        Validate that the output data format is compatible with investoper.py.
+        
+        This method checks that all required CSV files are generated with the
+        correct format and structure expected by the investment and operation
+        optimization module.
+        
+        Raises:
+            ValueError: If any required file is missing or has incorrect format
+        """
+        required_files = [
+            'prep_dist.csv', 'qrep_dist.csv', 'geol_dist.csv',
+            'pdem_dist.csv', 'qdem_dist.csv', 'psol_dist.csv',
+            'qsol_dist.csv', 'pwin_dist.csv', 'qwin_dist.csv', 'dtim_dist.csv'
+        ]
+        
+        missing_files = []
+        for file in required_files:
+            file_path = self.inp_folder + os.sep + file
+            if not os.path.exists(file_path):
+                missing_files.append(file)
+        
+        if missing_files:
+            raise ValueError(f"Missing required output files: {missing_files}")
+        
+        # Check data dimensions and format
+        try:
+            psol = pd.read_csv(self.inp_folder + os.sep + 'psol_dist.csv')
+            pwin = pd.read_csv(self.inp_folder + os.sep + 'pwin_dist.csv')
+            dtim = pd.read_csv(self.inp_folder + os.sep + 'dtim_dist.csv')
+            
+            # Verify that clustering produced the expected number of scenarios
+            if psol.shape[1] != self.n_clust:
+                print(f"Warning: Solar scenarios ({psol.shape[1]}) don't match n_clust ({self.n_clust})")
+            
+            if pwin.shape[1] != self.n_clust:
+                print(f"Warning: Wind scenarios ({pwin.shape[1]}) don't match n_clust ({self.n_clust})")
+            
+            if dtim.shape[0] != self.n_clust:
+                print(f"Warning: Duration scenarios ({dtim.shape[0]}) don't match n_clust ({self.n_clust})")
+            
+            print(f"✓ PVGIS 5.3 data processing completed successfully")
+            print(f"✓ Generated {self.n_clust} scenarios for optimization")
+            print(f"✓ All required files created in {self.inp_folder}")
+            
+        except Exception as e:
+            raise ValueError(f"Error validating output format: {e}")
+    
+    def _normalize_column_names(self):
+        """
+        Normalize column names from PVGIS 5.3 JSON response to match expected format.
+        
+        PVGIS 5.3 may return column names with slight variations. This method
+        ensures the column names match the expected format for data processing.
+        """
+        column_mapping = {
+            'time': 'time',
+            'P': 'P',  # PV power
+            'G(i)': 'G(i)',  # Global irradiance
+            'H_sun': 'H_sun',  # Sun height
+            'T2m': 'T2m',  # 2m temperature
+            'WS10m': 'WS10m',  # Wind speed
+            'Int': 'Int'  # Interpolation flag
+        }
+        
+        # Check for alternative column names and rename if necessary
+        current_cols = self.data.columns.tolist()
+        
+        # Handle potential variations in column names
+        if 'G(i)' not in current_cols and 'G_i' in current_cols:
+            self.data = self.data.rename(columns={'G_i': 'G(i)'})
+        
+        if 'WS10m' not in current_cols and 'WS_10m' in current_cols:
+            self.data = self.data.rename(columns={'WS_10m': 'WS10m'})
+        
+        if 'T2m' not in current_cols and 'T_2m' in current_cols:
+            self.data = self.data.rename(columns={'T_2m': 'T2m'})
+        
+        if 'H_sun' not in current_cols and 'H_sun' in current_cols:
+            self.data = self.data.rename(columns={'H_sun': 'H_sun'})
+        
+        print(f"Normalized column names: {self.data.columns.tolist()}")

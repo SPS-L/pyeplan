@@ -111,10 +111,10 @@ class rousys:
         self.sbase = 1000*sbase         
 
         #Base impedance                          
-        self.zbase = (vbase**2)/sbase
+        self.zbase = (self.vbase**2)/self.sbase
         
         #Base curent
-        self.ibase = sbase/(math.sqrt(3)*vbase)
+        self.ibase = self.sbase/(math.sqrt(3)*self.vbase)
         
         #Calculations of line/cable parameters 
         self.r = self.cblt.loc[self.cblt['crs'] == crs,'r'+str(typ)].values[0]*1e-3/self.zbase
@@ -167,7 +167,7 @@ class rousys:
         pos = nx.get_node_attributes(T,'pos')
         nx.draw_networkx_nodes(T,pos=pos,node_size=10,node_color='red')
         nx.draw_networkx_edges(T,pos=pos,edge_color='blue')
-        mplleaflet.show(fig=ax.figure) 
+        # mplleaflet.show(fig=ax.figure)  # Commented out due to matplotlib compatibility issues 
         
 
         rou_dist = pd.DataFrame(sorted(T.edges(data=True)))

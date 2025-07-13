@@ -60,7 +60,7 @@ Example Usage:
 """
 
 __name__ = "pyeplan"
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 __author__ = u'2025 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
 __copyright__ = u'2025 Shahab Dehghan, Agnes Nakiganda, Petros Aristidou'
 __license__ ='Apache Software License',

@@ -14,7 +14,7 @@ The module includes:
 - Geographic data processing and validation
 
 Classes:
-    datsys: Main class for data processing operations
+    :class:`datsys`: Main class for data processing operations
 
 Key Features:
 - Automatic data fetching from PVGIS database
@@ -31,11 +31,14 @@ References:
   General Meeting.
 - PVGIS API Documentation: https://ec.europa.eu/jrc/en/pvgis
 
-Example:
-    >>> from pyeplan.dataproc import datsys
-    >>> data_sys = datsys("input_folder", lat=0.25, lon=32.40, year=2016)
-    >>> data_sys.data_extract()
-    >>> data_sys.kmeans_clust()
+.. rubric:: Example
+
+.. code-block:: python
+
+    from pyeplan.dataproc import datsys
+    data_sys = datsys("input_folder", lat=0.25, lon=32.40, year=2016)
+    data_sys.data_extract()
+    data_sys.kmeans_clust()
 """
 
 import pandas as pd
@@ -128,8 +131,11 @@ class datsys:
 
         :raises ValueError: If PVGIS API returns an error or invalid response
 
-        :example:
-            >>> data_sys = datsys("input_folder", lat=0.25, lon=32.40, year=2016)
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            data_sys = datsys("input_folder", lat=0.25, lon=32.40, year=2016)
         """
         
         self.loc = pd.read_excel(inp_folder + os.sep + 'mgpc_dist.xlsx', sheet_name = 'Load Point', skiprows= 0, usecols = 'A,B')
@@ -350,9 +356,12 @@ class datsys:
         :ivar sol_irrad: Solar irradiance time series
         :ivar wind_speed: Wind speed time series
 
-        :example:
-            >>> data_sys = datsys("input_folder", lat=0.25, lon=32.40)
-            >>> data_sys.data_extract()
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            data_sys = datsys("input_folder", lat=0.25, lon=32.40)
+            data_sys.data_extract()
         """
         #Convert to local time zone
         
@@ -501,10 +510,13 @@ class datsys:
         :ivar qwin: Clustered wind reactive power scenarios
         :ivar dtim: Duration of each cluster
 
-        :example:
-            >>> data_sys = datsys("input_folder", n_clust=5)
-            >>> data_sys.data_extract()
-            >>> data_sys.kmeans_clust()
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            data_sys = datsys("input_folder", n_clust=5)
+            data_sys.data_extract()
+            data_sys.kmeans_clust()
         """
         #Defining the kmeans function with initialization as k-means++
         kmeans = KMeans(n_clusters=self.n_clust, init='k-means++')

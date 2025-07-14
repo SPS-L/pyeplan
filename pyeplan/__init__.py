@@ -9,19 +9,19 @@ and investment/operation optimization of microgrid systems.
 
 The library consists of three main modules:
 
-1. **datsys** (dataproc.py): Data processing and renewable energy resource assessment
+1. **datsys** (:mod:`pyeplan.dataproc`): Data processing and renewable energy resource assessment
    - Fetches solar irradiance and wind speed data from PVGIS API
    - Performs time series clustering using K-means algorithm
    - Processes load profiles and renewable generation data
    - Handles timezone conversion and data preprocessing
 
-2. **rousys** (routing.py): Network routing and topology optimization
+2. **rousys** (:mod:`pyeplan.routing`): Network routing and topology optimization
    - Implements minimum spanning tree algorithm for network design
    - Calculates geographical distances between nodes
    - Generates network topology and cable specifications
    - Creates routing and electrical line distribution files
 
-3. **inosys** (investoper.py): Investment and operation optimization
+3. **inosys** (:mod:`pyeplan.investoper`): Investment and operation optimization
    - Formulates and solves mixed-integer linear programming problems
    - Optimizes microgrid investment decisions (generators, storage, renewables)
    - Handles operational constraints (power balance, voltage limits, etc.)
@@ -42,21 +42,24 @@ References:
   Framework for Microgrid Planning and Operation." IEEE Power & Energy Society 
   General Meeting.
 
-Example Usage:
-    >>> import pyeplan
-    >>> 
-    >>> # Data processing
-    >>> data_sys = pyeplan.datsys("input_folder", lat=0.25, lon=32.40, year=2016)
-    >>> data_sys.data_extract()
-    >>> data_sys.kmeans_clust()
-    >>> 
-    >>> # Network routing
-    >>> route_sys = pyeplan.rousys("input_folder", crs=35, typ=7, vbase=415)
-    >>> route_sys.min_spn_tre()
-    >>> 
-    >>> # Investment and operation optimization
-    >>> inv_sys = pyeplan.inosys("input_folder", ref_bus=0)
-    >>> inv_sys.solve(solver='glpk', invest=True, onlyopr=False)
+.. rubric:: Example Usage
+
+.. code-block:: python
+
+    import pyeplan
+    
+    # Data processing
+    data_sys = pyeplan.datsys("input_folder", lat=0.25, lon=32.40, year=2016)
+    data_sys.data_extract()
+    data_sys.kmeans_clust()
+    
+    # Network routing
+    route_sys = pyeplan.rousys("input_folder", crs=35, typ=7, vbase=415)
+    route_sys.min_spn_tre()
+    
+    # Investment and operation optimization
+    inv_sys = pyeplan.inosys("input_folder", ref_bus=0)
+    inv_sys.solve(solver='glpk', invest=True, onlyopr=False)
 """
 
 __name__ = "pyeplan"

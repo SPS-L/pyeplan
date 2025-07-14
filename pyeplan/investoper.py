@@ -14,7 +14,7 @@ The module includes:
 - Support for multiple solvers (GLPK, CBC, IPOPT, Gurobi)
 
 Classes:
-    inosys: Main class for investment and operation optimization
+    :class:`inosys`: Main class for investment and operation optimization
 
 Key Features:
 - Comprehensive microgrid modeling (generators, storage, renewables, loads)
@@ -24,9 +24,13 @@ Key Features:
 - Investment decision optimization
 - Operational cost minimization
 
-Mathematical Formulation:
+.. rubric:: Mathematical Formulation
+
 The optimization problem minimizes total system cost:
-    min Z = C_inv + C_opr + C_shed
+
+.. math::
+
+    \min Z = C_{inv} + C_{opr} + C_{shed}
 
 Subject to:
 - Power balance constraints (active and reactive)
@@ -43,10 +47,13 @@ References:
   Framework for Microgrid Planning and Operation." IEEE Power & Energy Society 
   General Meeting.
 
-Example:
-    >>> from pyeplan.investoper import inosys
-    >>> inv_sys = inosys("input_folder", ref_bus=0)
-    >>> inv_sys.solve(solver='glpk', invest=True, onlyopr=False)
+.. rubric:: Example
+
+.. code-block:: python
+
+    from pyeplan.investoper import inosys
+    inv_sys = inosys("input_folder", ref_bus=0)
+    inv_sys.solve(solver='glpk', invest=True, onlyopr=False)
 """
 
 import pandas as pd
@@ -72,71 +79,79 @@ class inosys:
     - Demand shedding and renewable curtailment
     - Battery energy storage system operation
     
-    Attributes:
-        cgen (pd.DataFrame): Conventional generator candidate data
-        egen (pd.DataFrame): Existing conventional generator data
-        csol (pd.DataFrame): Solar PV candidate data
-        esol (pd.DataFrame): Existing solar PV data
-        cwin (pd.DataFrame): Wind turbine candidate data
-        ewin (pd.DataFrame): Existing wind turbine data
-        cbat (pd.DataFrame): Battery storage candidate data
-        elin (pd.DataFrame): Electrical line data
-        pdem (pd.DataFrame): Active power demand profiles
-        qdem (pd.DataFrame): Reactive power demand profiles
-        prep (pd.DataFrame): Renewable active power profiles
-        qrep (pd.DataFrame): Renewable reactive power profiles
-        psol (pd.DataFrame): Solar power scenarios
-        qsol (pd.DataFrame): Solar reactive power scenarios
-        pwin (pd.DataFrame): Wind power scenarios
-        qwin (pd.DataFrame): Wind reactive power scenarios
-        dtim (pd.DataFrame): Time duration for each scenario
-        ncg (int): Number of candidate conventional generators
-        neg (int): Number of existing conventional generators
-        ncs (int): Number of candidate solar PV systems
-        nes (int): Number of existing solar PV systems
-        ncw (int): Number of candidate wind turbines
-        new (int): Number of existing wind turbines
-        ncb (int): Number of candidate battery systems
-        nel (int): Number of electrical lines
-        nbb (int): Number of buses/nodes
-        ntt (int): Number of time periods
-        noo (int): Number of scenarios
-        cds (float): Demand shedding cost
-        css (float): Solar curtailment cost
-        cws (float): Wind curtailment cost
-        sb (float): Base apparent power
-        sf (float): Scaling factor
-        ref_bus (int): Reference bus number
-        vmin (float): Minimum voltage limit
-        vmax (float): Maximum voltage limit
-        inp_folder (str): Input folder path
-        phase (int): Number of phases
-        outdir (str): Output directory path
+    :ivar cgen: Conventional generator candidate data (pd.DataFrame)
+    :ivar egen: Existing conventional generator data (pd.DataFrame)
+    :ivar csol: Solar PV candidate data (pd.DataFrame)
+    :ivar esol: Existing solar PV data (pd.DataFrame)
+    :ivar cwin: Wind turbine candidate data (pd.DataFrame)
+    :ivar ewin: Existing wind turbine data (pd.DataFrame)
+    :ivar cbat: Battery storage candidate data (pd.DataFrame)
+    :ivar elin: Electrical line data (pd.DataFrame)
+    :ivar pdem: Active power demand profiles (pd.DataFrame)
+    :ivar qdem: Reactive power demand profiles (pd.DataFrame)
+    :ivar prep: Renewable active power profiles (pd.DataFrame)
+    :ivar qrep: Renewable reactive power profiles (pd.DataFrame)
+    :ivar psol: Solar power scenarios (pd.DataFrame)
+    :ivar qsol: Solar reactive power scenarios (pd.DataFrame)
+    :ivar pwin: Wind power scenarios (pd.DataFrame)
+    :ivar qwin: Wind reactive power scenarios (pd.DataFrame)
+    :ivar dtim: Time duration for each scenario (pd.DataFrame)
+    :ivar ncg: Number of candidate conventional generators (int)
+    :ivar neg: Number of existing conventional generators (int)
+    :ivar ncs: Number of candidate solar PV systems (int)
+    :ivar nes: Number of existing solar PV systems (int)
+    :ivar ncw: Number of candidate wind turbines (int)
+    :ivar new: Number of existing wind turbines (int)
+    :ivar ncb: Number of candidate battery systems (int)
+    :ivar nel: Number of electrical lines (int)
+    :ivar nbb: Number of buses/nodes (int)
+    :ivar ntt: Number of time periods (int)
+    :ivar noo: Number of scenarios (int)
+    :ivar cds: Demand shedding cost (float)
+    :ivar css: Solar curtailment cost (float)
+    :ivar cws: Wind curtailment cost (float)
+    :ivar sb: Base apparent power (float)
+    :ivar sf: Scaling factor (float)
+    :ivar ref_bus: Reference bus number (int)
+    :ivar vmin: Minimum voltage limit (float)
+    :ivar vmax: Maximum voltage limit (float)
+    :ivar inp_folder: Input folder path (str)
+    :ivar phase: Number of phases (int)
+    :ivar outdir: Output directory path (str)
     
-    Methods:
-        solve(): Solve the investment and operation optimization problem
-        resCost(): Get optimization results - costs
-        resWind(): Get optimization results - wind generation
-        resBat(): Get optimization results - battery operation
-        resSolar(): Get optimization results - solar generation
-        resConv(): Get optimization results - conventional generation
-        resCurt(): Get optimization results - curtailment
+    .. rubric:: Methods
+
+    * :meth:`solve` -- Solve the investment and operation optimization problem
+    * :meth:`resCost` -- Get optimization results - costs
+    * :meth:`resWind` -- Get optimization results - wind generation
+    * :meth:`resBat` -- Get optimization results - battery operation
+    * :meth:`resSolar` -- Get optimization results - solar generation
+    * :meth:`resConv` -- Get optimization results - conventional generation
+    * :meth:`resCurt` -- Get optimization results - curtailment
     """
 
     def __init__(self, inp_folder, ref_bus, dshed_cost = 1000000, rshed_cost = 500, phase = 3, vmin=0.85, vmax=1.15, sbase = 1, sc_fa = 1):
         """
         Initialize the investment and operation optimization system.
         
-        Parameters:
-            inp_folder (str): Input directory containing CSV data files
-            ref_bus (int): Reference bus number for the system
-            dshed_cost (float): Demand shedding cost (default: 1000000)
-            rshed_cost (float): Renewable shedding cost (default: 500)
-            phase (int): Number of phases (default: 3)
-            vmin (float): Minimum voltage limit in p.u. (default: 0.85)
-            vmax (float): Maximum voltage limit in p.u. (default: 1.15)
-            sbase (float): Base apparent power in kW (default: 1)
-            sc_fa (float): Scaling factor (default: 1)
+        :param inp_folder: Input directory containing CSV data files
+        :type inp_folder: str
+        :param ref_bus: Reference bus number for the system
+        :type ref_bus: int
+        :param dshed_cost: Demand shedding cost (default: 1000000)
+        :type dshed_cost: float
+        :param rshed_cost: Renewable shedding cost (default: 500)
+        :type rshed_cost: float
+        :param phase: Number of phases (default: 3)
+        :type phase: int
+        :param vmin: Minimum voltage limit in p.u. (default: 0.85)
+        :type vmin: float
+        :param vmax: Maximum voltage limit in p.u. (default: 1.15)
+        :type vmax: float
+        :param sbase: Base apparent power in kW (default: 1)
+        :type sbase: float
+        :param sc_fa: Scaling factor (default: 1)
+        :type sc_fa: float
         
         Required input files:
             - cgen_dist.csv: Conventional generator candidate data
@@ -157,8 +172,14 @@ class inosys:
             - qwin_dist.csv: Wind reactive power scenarios
             - dtim_dist.csv: Time duration for each scenario
         
-        Example:
-            >>> inv_sys = inosys("input_folder", ref_bus=0, dshed_cost=1000000)
+        :raises FileNotFoundError: If required input files are missing
+        :raises ValueError: If data format is incorrect or parameters are invalid
+        
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            inv_sys = inosys("input_folder", ref_bus=0, dshed_cost=1000000)
         """
         
         self.cgen = pd.read_csv(inp_folder + os.sep + 'cgen_dist.csv')
@@ -260,26 +281,49 @@ class inosys:
 
 
     def solve(self, solver = 'glpk', neos = False, invest = False, onlyopr = True, commit = False, solemail = '', verbose = False):
-        '''
+        """
         Solve the investment and operation problem.
         
-        Parameters:
-            solver (str): Solver to be used. Available: glpk, cbc, ipopt, gurobi
-            neos (bool): True/False indicates if using NEOS remote solver service
-            invest (bool): True/False indicates binary/continuous nature of investment-related decision variables
-            onlyopr (bool): True/False indicates if the problem will only solve the operation or both investment and operation
-            commit (bool): True/False indicates if using binary commitment variables for generators
-            solemail (str): Email address required for NEOS solver service
-            verbose (bool): True/False indicates if solver output should be displayed (default: False)
+        This method formulates and solves a mixed-integer linear programming problem
+        for microgrid investment and operation optimization. It creates a Pyomo model
+        with all necessary constraints and solves it using the specified solver.
         
-        Returns:
-            None: Updates the object with optimization results and saves output files
+        :param solver: Solver to be used. Available: glpk, cbc, ipopt, gurobi (default: 'glpk')
+        :type solver: str
+        :param neos: True/False indicates if using NEOS remote solver service (default: False)
+        :type neos: bool
+        :param invest: True/False indicates binary/continuous nature of investment-related decision variables (default: False)
+        :type invest: bool
+        :param onlyopr: True/False indicates if the problem will only solve the operation or both investment and operation (default: True)
+        :type onlyopr: bool
+        :param commit: True/False indicates if using binary commitment variables for generators (default: False)
+        :type commit: bool
+        :param solemail: Email address required for NEOS solver service (default: '')
+        :type solemail: str
+        :param verbose: True/False indicates if solver output should be displayed (default: False)
+        :type verbose: bool
         
-        Example:
-            >>> import pyeplan
-            >>> sys_inv = pyeplan.inosys("wat_inv", ref_bus = 260)
-            >>> sys_inv.solve(verbose=True)
-        '''
+        :return: None
+        :rtype: None
+        
+        :raises ValueError: If solver is not available or model formulation fails
+        :raises RuntimeError: If optimization fails to converge or find feasible solution
+        
+        The method performs the following steps:
+        1. Creates Pyomo model with sets, variables, and constraints
+        2. Defines objective function and all operational constraints
+        3. Solves the optimization problem using specified solver
+        4. Extracts and stores optimization results
+        5. Saves results to output files
+        
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            import pyeplan
+            sys_inv = pyeplan.inosys("wat_inv", ref_bus = 260)
+            sys_inv.solve(verbose=True)
+        """
 
         
         #Define the Model type
@@ -797,21 +841,23 @@ class inosys:
         operational costs, and total system costs from the optimization results
         as a pandas DataFrame.
         
-        Returns:
-            pandas.DataFrame: Cost breakdown with columns:
-                - total costs: Total system cost
-                - total investment costs: Investment cost component
-                - total operation costs: Operational cost component
+        :return: Cost breakdown with columns:
+            - total costs: Total system cost
+            - total investment costs: Investment cost component
+            - total operation costs: Operational cost component
+        :rtype: pandas.DataFrame
         
-        Raises:
-            Exception: If solve() method has not been successfully executed or
-                      if the results directory doesn't exist
+        :raises Exception: If solve() method has not been successfully executed or
+                          if the results directory doesn't exist
         
-        Example:
-            >>> inv_sys = inosys("input_folder", ref_bus=0)
-            >>> inv_sys.solve()
-            >>> cost_results = inv_sys.resCost()
-            >>> print(cost_results)
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            inv_sys = inosys("input_folder", ref_bus=0)
+            inv_sys.solve()
+            cost_results = inv_sys.resCost()
+            print(cost_results)
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
@@ -828,18 +874,20 @@ class inosys:
         including installed capacity and bus locations for each candidate
         wind turbine.
         
-        Returns:
-            pandas.DataFrame: Wind investment results with columns:
-                - Installed Capacity (kW): Optimal capacity for each wind turbine
-                - Bus: Bus number where wind turbine is installed
+        :return: Wind investment results with columns:
+            - Installed Capacity (kW): Optimal capacity for each wind turbine
+            - Bus: Bus number where wind turbine is installed
+        :rtype: pandas.DataFrame
         
-        Raises:
-            Exception: If solve() method has not been successfully executed
+        :raises Exception: If solve() method has not been successfully executed
         
-        Example:
-            >>> inv_sys = inosys("input_folder", ref_bus=0)
-            >>> inv_sys.solve(invest=True)
-            >>> wind_results = inv_sys.resWind()
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            inv_sys = inosys("input_folder", ref_bus=0)
+            inv_sys.solve(invest=True)
+            wind_results = inv_sys.resWind()
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
@@ -871,18 +919,20 @@ class inosys:
         including installed capacity and bus locations for each candidate
         battery system.
         
-        Returns:
-            pandas.DataFrame: Battery investment results with columns:
-                - Installed Capacity (kW): Optimal capacity for each battery system
-                - Bus: Bus number where battery is installed
+        :return: Battery investment results with columns:
+            - Installed Capacity (kW): Optimal capacity for each battery system
+            - Bus: Bus number where battery is installed
+        :rtype: pandas.DataFrame
         
-        Raises:
-            Exception: If solve() method has not been successfully executed
+        :raises Exception: If solve() method has not been successfully executed
         
-        Example:
-            >>> inv_sys = inosys("input_folder", ref_bus=0)
-            >>> inv_sys.solve(invest=True)
-            >>> battery_results = inv_sys.resBat()
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            inv_sys = inosys("input_folder", ref_bus=0)
+            inv_sys.solve(invest=True)
+            battery_results = inv_sys.resBat()
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
@@ -914,18 +964,20 @@ class inosys:
         including installed capacity and bus locations for each candidate
         solar PV system.
         
-        Returns:
-            pandas.DataFrame: Solar investment results with columns:
-                - Installed Capacity (kW): Optimal capacity for each solar PV system
-                - Bus: Bus number where solar PV is installed
+        :return: Solar investment results with columns:
+            - Installed Capacity (kW): Optimal capacity for each solar PV system
+            - Bus: Bus number where solar PV is installed
+        :rtype: pandas.DataFrame
         
-        Raises:
-            Exception: If solve() method has not been successfully executed
+        :raises Exception: If solve() method has not been successfully executed
         
-        Example:
-            >>> inv_sys = inosys("input_folder", ref_bus=0)
-            >>> inv_sys.solve(invest=True)
-            >>> solar_results = inv_sys.resSolar()
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            inv_sys = inosys("input_folder", ref_bus=0)
+            inv_sys.solve(invest=True)
+            solar_results = inv_sys.resSolar()
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
@@ -957,18 +1009,20 @@ class inosys:
         including installed capacity and bus locations for each candidate
         conventional generator.
         
-        Returns:
-            pandas.DataFrame: Conventional generator investment results with columns:
-                - Installed Capacity (kW): Optimal capacity for each generator
-                - Bus: Bus number where generator is installed
+        :return: Conventional generator investment results with columns:
+            - Installed Capacity (kW): Optimal capacity for each generator
+            - Bus: Bus number where generator is installed
+        :rtype: pandas.DataFrame
         
-        Raises:
-            Exception: If solve() method has not been successfully executed
+        :raises Exception: If solve() method has not been successfully executed
         
-        Example:
-            >>> inv_sys = inosys("input_folder", ref_bus=0)
-            >>> inv_sys.solve(invest=True)
-            >>> conv_results = inv_sys.resConv()
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            inv_sys = inosys("input_folder", ref_bus=0)
+            inv_sys.solve(invest=True)
+            conv_results = inv_sys.resConv()
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
@@ -1009,20 +1063,22 @@ class inosys:
         results from the optimization, showing how much load was shed and
         how much renewable energy was curtailed.
         
-        Returns:
-            dict: Dictionary containing three pandas.DataFrames:
-                - 'demand_shedding': Demand shedding results (pds.csv)
-                - 'solar_curtailment': Solar curtailment results (pss.csv)
-                - 'wind_curtailment': Wind curtailment results (pws.csv)
+        :return: Dictionary containing three pandas.DataFrames:
+            - 'demand_shedding': Demand shedding results (pds.csv)
+            - 'solar_curtailment': Solar curtailment results (pss.csv)
+            - 'wind_curtailment': Wind curtailment results (pws.csv)
+        :rtype: dict
         
-        Raises:
-            Exception: If solve() method has not been successfully executed
+        :raises Exception: If solve() method has not been successfully executed
         
-        Example:
-            >>> inv_sys = inosys("input_folder", ref_bus=0)
-            >>> inv_sys.solve()
-            >>> curtailment_results = inv_sys.resCurt()
-            >>> print(curtailment_results['demand_shedding'])
+        .. rubric:: Example
+
+        .. code-block:: python
+
+            inv_sys = inosys("input_folder", ref_bus=0)
+            inv_sys.solve()
+            curtailment_results = inv_sys.resCurt()
+            print(curtailment_results['demand_shedding'])
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
@@ -1041,15 +1097,19 @@ def pyomo2dfinv(pyomo_var,index1):
     This utility function converts Pyomo investment decision variables
     to a pandas DataFrame format for easier analysis and display.
     
-    Parameters:
-        pyomo_var: Pyomo variable object (investment decisions)
-        index1: Index set for the variable
+    :param pyomo_var: Pyomo variable object (investment decisions)
+    :type pyomo_var: pyomo.core.base.var.Var
+    :param index1: Index set for the variable
+    :type index1: pyomo.core.base.sets.Set
     
-    Returns:
-        pandas.DataFrame: DataFrame with investment decision values
+    :return: DataFrame with investment decision values
+    :rtype: pandas.DataFrame
     
-    Example:
-        >>> xg_df = pyomo2dfinv(m.xg, m.cg)
+    .. rubric:: Example
+
+    .. code-block:: python
+
+        xg_df = pyomo2dfinv(m.xg, m.cg)
     """
     df = pd.DataFrame()
     for i in index1:
@@ -1063,18 +1123,25 @@ def pyomo2dfopr(pyomo_var,index1,index2,index3,dec=6):
     This utility function converts Pyomo operational decision variables
     to a pandas DataFrame format for easier analysis and display.
     
-    Parameters:
-        pyomo_var: Pyomo variable object (operational decisions)
-        index1: First index set (e.g., generators)
-        index2: Second index set (e.g., time periods)
-        index3: Third index set (e.g., scenarios)
-        dec (int): Number of decimal places for rounding (default: 6)
+    :param pyomo_var: Pyomo variable object (operational decisions)
+    :type pyomo_var: pyomo.core.base.var.Var
+    :param index1: First index set (e.g., generators)
+    :type index1: pyomo.core.base.sets.Set
+    :param index2: Second index set (e.g., time periods)
+    :type index2: pyomo.core.base.sets.Set
+    :param index3: Third index set (e.g., scenarios)
+    :type index3: pyomo.core.base.sets.Set
+    :param dec: Number of decimal places for rounding (default: 6)
+    :type dec: int
     
-    Returns:
-        pandas.DataFrame: DataFrame with operational decision values
+    :return: DataFrame with operational decision values
+    :rtype: pandas.DataFrame
     
-    Example:
-        >>> pcg_df = pyomo2dfopr(m.pcg, m.cg, m.tt, m.oo)
+    .. rubric:: Example
+
+    .. code-block:: python
+
+        pcg_df = pyomo2dfopr(m.pcg, m.cg, m.tt, m.oo)
     """
     df = pd.DataFrame()
     for i in index1:
@@ -1090,17 +1157,23 @@ def pyomo2dfoprm(pyomo_var,index1,index2,index3):
     This utility function converts Pyomo operational decision variables
     to a pandas DataFrame in matrix format for easier analysis and display.
     
-    Parameters:
-        pyomo_var: Pyomo variable object (operational decisions)
-        index1: First index set (e.g., buses)
-        index2: Second index set (e.g., time periods)
-        index3: Third index set (e.g., scenarios)
+    :param pyomo_var: Pyomo variable object (operational decisions)
+    :type pyomo_var: pyomo.core.base.var.Var
+    :param index1: First index set (e.g., buses)
+    :type index1: pyomo.core.base.sets.Set
+    :param index2: Second index set (e.g., time periods)
+    :type index2: pyomo.core.base.sets.Set
+    :param index3: Third index set (e.g., scenarios)
+    :type index3: pyomo.core.base.sets.Set
     
-    Returns:
-        pandas.DataFrame: DataFrame with operational decision values in matrix format
+    :return: DataFrame with operational decision values in matrix format
+    :rtype: pandas.DataFrame
     
-    Example:
-        >>> vol_df = pyomo2dfoprm(m.vol, m.bb, m.tt, m.oo)
+    .. rubric:: Example
+
+    .. code-block:: python
+
+        vol_df = pyomo2dfoprm(m.vol, m.bb, m.tt, m.oo)
     """
     df = pd.DataFrame()
     for i in index1:

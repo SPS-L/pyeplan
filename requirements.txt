@@ -13,6 +13,7 @@ pyomo>=6.1.2,<7.0.0
 networkx>=2.6.3,<3.0.0
 matplotlib>=3.3.0,<4.0.0
 mplleaflet>=0.0.5
+plotly>=5.0.0,<6.0.0
 
 # Machine learning and clustering
 scikit-learn>=1.0.0,<2.0.0

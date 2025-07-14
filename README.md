@@ -28,6 +28,8 @@ PyEPlan is a comprehensive Python library designed for the planning and operatio
 
 ### Create Virtual Environment (Recommended)
 
+#### Using venv (Python's built-in virtual environment)
+
 ```bash
 # Create virtual environment
 python -m venv pyeplan_env
@@ -37,6 +39,16 @@ python -m venv pyeplan_env
 pyeplan_env\Scripts\activate
 # On macOS/Linux:
 source pyeplan_env/bin/activate
+```
+
+#### Using conda (Alternative)
+
+```bash
+# Create conda environment
+conda create -n pyeplan_env python=3.9
+
+# Activate conda environment
+conda activate pyeplan_env
 ```
 
 ### From PyPI (Recommended)
@@ -112,9 +124,30 @@ sudo dnf install glpk glpk-devel
 #### Alternative Solvers
 
 PyEPlan also supports:
-- **CBC**: `conda install -c defaults -c conda-forge coin-or-cbc`
-- **IPOPT**: `conda install -c defaults -c conda-forge ipopt`
-- **Gurobi**: Commercial solver, requires license
+
+**CBC (COIN-OR Branch and Cut):**
+```bash
+# Using conda (recommended)
+conda install -c defaults -c conda-forge coin-or-cbc
+
+# Using pip
+pip install cylp
+
+# Manual installation
+# Download from https://github.com/coin-or/Cbc/releases
+```
+
+**IPOPT (Interior Point Optimizer):**
+```bash
+# Using conda
+conda install -c defaults -c conda-forge ipopt
+
+# Using pip
+pip install ipopt
+```
+
+**Gurobi:**
+Commercial solver, requires license. Download from [Gurobi website](https://www.gurobi.com/downloads/).
 
 For solver-specific installation instructions, see the [Pyomo documentation](https://pyomo.readthedocs.io/en/stable/installation.html).
 

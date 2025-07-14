@@ -2,9 +2,39 @@
 Release Notes
 #######################
 
-This section documents the version history and changes in PyEPLAN releases.
+This section documents the version history and changes in PyEPlan releases.
 
-PyEPLAN 1.0.0 (12 Jul 2024)
+PyEPlan 1.1.0 (Current Version)
+===============================
+
+**Production Release - Enhanced Features**
+
+New Features:
+
+* **PVGIS 5.3 API Integration**: Updated to latest PVGIS API with support for multiple radiation databases (SARAH2, ERA5, NSRDB)
+* **Enhanced Data Processing**: Improved time series clustering with K-means algorithm and better data validation
+* **Unified Optimization Framework**: Combined investment and operation planning in single MILP formulation
+* **Comprehensive Battery Modeling**: Advanced battery energy storage system (BESS) modeling with state of charge tracking
+* **Network Topology Optimization**: Minimum spanning tree algorithm for optimal feeder routing
+* **Multiple Solver Support**: Enhanced support for GLPK, CBC, IPOPT, Gurobi, and other Pyomo-compatible solvers
+
+Enhancements:
+
+* **Improved API Structure**: Clean module organization with datsys, rousys, and inosys classes
+* **Better Error Handling**: Comprehensive validation for input data and API communication
+* **Enhanced Documentation**: Complete API reference and usage examples
+* **Geographic Data Processing**: Haversine distance calculations and timezone detection
+* **Flexible Optimization Modes**: Investment-only, operation-only, and combined modes
+* **Structured Results**: Pandas DataFrame outputs for easy analysis and visualization
+
+Technical Improvements:
+
+* **Memory Optimization**: Efficient data structures and sparse matrix handling
+* **Numerical Stability**: Improved convergence for large-scale optimization problems
+* **Code Quality**: Enhanced code documentation and type hints
+* **Modular Design**: Clean separation of concerns between data processing, routing, and optimization
+
+PyEPlan 1.0.0 (12 Jul 2024)
 ============================
 
 **Major Release - Production Ready**
@@ -41,7 +71,7 @@ Breaking Changes:
 * Changed default solver parameters for improved performance
 * Modified input file formats for better standardization
 
-PyEPLAN 0.5 (18 Oct 2023)
+PyEPlan 0.5 (18 Oct 2023)
 ==========================
 
 **Minor Release**
@@ -52,7 +82,7 @@ Bug Fixes:
 * Improved package compatibility and installation
 * Enhanced error handling for newer Python versions
 
-PyEPLAN 0.4 (14 Nov 2022)
+PyEPlan 0.4 (14 Nov 2022)
 ==========================
 
 **Minor Release**
@@ -64,7 +94,7 @@ Features:
 * Better documentation and examples
 * Enhanced error handling and validation
 
-PyEPLAN 0.3 (14 Feb 2022)
+PyEPlan 0.3 (14 Feb 2022)
 ==========================
 
 **Patch Release**
@@ -75,7 +105,7 @@ Bug Fixes:
 * Fixed import issues and module organization
 * Improved package distribution
 
-PyEPLAN 0.1 (15 Jun 2020)
+PyEPlan 0.1 (15 Jun 2020)
 ==========================
 
 **First Beta Release (Pre-release)**
@@ -98,24 +128,34 @@ Known Issues:
 Development Roadmap
 ==================
 
-**Upcoming Features (v1.1.0)**:
+**Upcoming Features (v1.2.0)**:
 
 * Real-time optimization capabilities
-* Advanced uncertainty modeling
-* Integration with external data sources
-* Enhanced visualization and reporting
-* Support for energy storage optimization
+* Advanced uncertainty modeling with Monte Carlo simulation
+* Integration with additional renewable energy data sources
+* Enhanced visualization and reporting tools
+* Support for multi-objective optimization
+* Advanced machine learning integration for load forecasting
 
 **Future Plans (v2.0.0)**:
 
-* Multi-objective optimization
-* Advanced machine learning integration
 * Cloud-based deployment options
-* Real-time monitoring and control
+* Real-time monitoring and control integration
 * Integration with SCADA systems
+* Advanced grid services modeling
+* Support for electric vehicle charging infrastructure
+* Multi-energy system optimization (heat, electricity, hydrogen)
 
 Migration Guide
 ==============
+
+**From v1.0.0 to v1.1.0**:
+
+* Updated PVGIS API integration - new radiation database options
+* Enhanced battery modeling with improved state of charge tracking
+* Unified optimization framework - combined investment and operation planning
+* Improved result methods with structured DataFrame outputs
+* Enhanced error handling and validation
 
 **From v0.5 to v1.0.0**:
 

@@ -211,7 +211,7 @@ class datsys:
         # Determine appropriate radiation database based on location
         if raddatabase is None:
             if -60 <= self.lat <= 65 and -180 <= self.lon <= 180:  # Global coverage
-                raddatabase = 'PVGIS-SARAH2'
+                raddatabase = 'PVGIS-SARAH3'  # Updated to SARAH3
             else:
                 raddatabase = 'PVGIS-ERA5'  # Fallback for other regions
         
@@ -355,7 +355,7 @@ class datsys:
         #Convert to local time zone
         
         #Create yearly UTC timestamps using pandas
-        UTC_time = pd.date_range(str(self.startyear) +'-01-01', str(self.endyear+1) +'-01-01', freq='1H', closed='left', tz='UTC')
+        UTC_time = pd.date_range(str(self.startyear) +'-01-01', str(self.endyear+1) +'-01-01', freq='1H', inclusive='left', tz='UTC')
         
         #Convert UTC to local time
         local_time = UTC_time.tz_convert(self.local_time_zone)
@@ -371,8 +371,8 @@ class datsys:
         if self.outputformat == 'json':
             # For JSON format, data is already structured
             if self.pvcalculation == 1:
-                # Convert time column to datetime
-                self.data['time'] = pd.to_datetime(self.data['time'])
+                # Convert time column to datetime - PVGIS 5.3 uses format YYYYMMDD:HHMM
+                self.data['time'] = pd.to_datetime(self.data['time'], format='%Y%m%d:%H%M')
                 self.data['date'] = self.data['time'].dt.date
                 self.data['hour'] = self.data['time'].dt.time
                 
@@ -390,11 +390,16 @@ class datsys:
                 else:
                     raise ValueError("PV power column 'P' not found in PVGIS 5.3 response")
                 
-                # Extracting solar irradiance data (column 'G(i)' in PVGIS 5.3)
-                if 'G(i)' in available_cols:
+                # Extracting solar irradiance data (PVGIS 5.3 returns Gb(i), Gd(i), Gr(i) components)
+                if 'Gb(i)' in available_cols and 'Gd(i)' in available_cols and 'Gr(i)' in available_cols:
+                    # Calculate total global irradiance as sum of beam, diffuse, and reflected components
+                    self.data_local_time['G(i)'] = self.data_local_time['Gb(i)'] + self.data_local_time['Gd(i)'] + self.data_local_time['Gr(i)']
+                    self.sol_irrad = pd.pivot(self.data_local_time, index='date', columns='hour', values='G(i)')
+                elif 'G(i)' in available_cols:
+                    # Fallback to direct G(i) column if available
                     self.sol_irrad = pd.pivot(self.data_local_time, index='date', columns='hour', values='G(i)')
                 else:
-                    raise ValueError("Solar irradiance column 'G(i)' not found in PVGIS 5.3 response")
+                    raise ValueError("Solar irradiance columns not found in PVGIS 5.3 response. Expected 'Gb(i)', 'Gd(i)', 'Gr(i)' or 'G(i)'")
                 
                 # Extracting wind speed data (column 'WS10m' in PVGIS 5.3)
                 if 'WS10m' in available_cols:
@@ -406,8 +411,8 @@ class datsys:
                 power_chrono.to_csv(self.inp_folder + os.sep + 'power_chrono.csv', index=False)
                 
             else:  # pvcalculation == 0
-                # Convert time column to datetime
-                self.data['time'] = pd.to_datetime(self.data['time'])
+                # Convert time column to datetime - PVGIS 5.3 uses format YYYYMMDD:HHMM
+                self.data['time'] = pd.to_datetime(self.data['time'], format='%Y%m%d:%H%M')
                 self.data['date'] = self.data['time'].dt.date
                 self.data['hour'] = self.data['time'].dt.time
                 
@@ -419,11 +424,16 @@ class datsys:
                 available_cols = self.data_local_time.columns.tolist()
                 print(f"Available columns in PVGIS 5.3 data (pvcalc=0): {available_cols}")
                 
-                # Extracting solar irradiance data (column 'G(i)' in PVGIS 5.3)
-                if 'G(i)' in available_cols:
+                # Extracting solar irradiance data (PVGIS 5.3 returns Gb(i), Gd(i), Gr(i) components)
+                if 'Gb(i)' in available_cols and 'Gd(i)' in available_cols and 'Gr(i)' in available_cols:
+                    # Calculate total global irradiance as sum of beam, diffuse, and reflected components
+                    self.data_local_time['G(i)'] = self.data_local_time['Gb(i)'] + self.data_local_time['Gd(i)'] + self.data_local_time['Gr(i)']
+                    self.sol_irrad = pd.pivot(self.data_local_time, index='date', columns='hour', values='G(i)')
+                elif 'G(i)' in available_cols:
+                    # Fallback to direct G(i) column if available
                     self.sol_irrad = pd.pivot(self.data_local_time, index='date', columns='hour', values='G(i)')
                 else:
-                    raise ValueError("Solar irradiance column 'G(i)' not found in PVGIS 5.3 response")
+                    raise ValueError("Solar irradiance columns not found in PVGIS 5.3 response. Expected 'Gb(i)', 'Gd(i)', 'Gr(i)' or 'G(i)'")
                 
                 # Extracting wind speed data (column 'WS10m' in PVGIS 5.3)
                 if 'WS10m' in available_cols:

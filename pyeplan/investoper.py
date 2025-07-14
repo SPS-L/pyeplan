@@ -49,7 +49,6 @@ Example:
     >>> inv_sys.solve(solver='glpk', invest=True, onlyopr=False)
 """
 
-from IPython.display import display
 import pandas as pd
 import pyomo.environ as pe
 import numpy as np
@@ -116,8 +115,8 @@ class inosys:
     
     Methods:
         solve(): Solve the investment and operation optimization problem
-        resCost(): Display optimization results - costs
-        resWind(): Display optimization results - wind generation
+        resCost(): Get optimization results - costs
+        resWind(): Get optimization results - wind generation
         resBat(): Get optimization results - battery operation
         resSolar(): Get optimization results - solar generation
         resConv(): Get optimization results - conventional generation
@@ -260,7 +259,7 @@ class inosys:
         self.outdir = ''
 
 
-    def solve(self, solver = 'glpk', neos = False, invest = False, onlyopr = True, commit = False, solemail = ''):
+    def solve(self, solver = 'glpk', neos = False, invest = False, onlyopr = True, commit = False, solemail = '', verbose = False):
         '''
         Solve the investment and operation problem.
         
@@ -271,6 +270,7 @@ class inosys:
             onlyopr (bool): True/False indicates if the problem will only solve the operation or both investment and operation
             commit (bool): True/False indicates if using binary commitment variables for generators
             solemail (str): Email address required for NEOS solver service
+            verbose (bool): True/False indicates if solver output should be displayed (default: False)
         
         Returns:
             None: Updates the object with optimization results and saves output files
@@ -278,7 +278,7 @@ class inosys:
         Example:
             >>> import pyeplan
             >>> sys_inv = pyeplan.inosys("wat_inv", ref_bus = 260)
-            >>> sys_inv.solve()
+            >>> sys_inv.solve(verbose=True)
         '''
 
         
@@ -689,9 +689,9 @@ class inosys:
         if neos:
             os.environ['NEOS_EMAIL'] = solemail
             solver_manager = pe.SolverManagerFactory('neos')
-            result = solver_manager.solve(m,opt=opt,symbolic_solver_labels=True,tee=True)
+            result = solver_manager.solve(m,opt=opt,symbolic_solver_labels=True,tee=verbose)
         else:
-            result = opt.solve(m,symbolic_solver_labels=True,tee=True)
+            result = opt.solve(m,symbolic_solver_labels=True,tee=verbose)
         
         self.output = m
         
@@ -791,39 +791,47 @@ class inosys:
     
     def resCost(self):
         """
-        Display the objective cost results.
+        Get the objective cost results.
         
-        This method displays the total costs breakdown including investment costs,
-        operational costs, and total system costs from the optimization results.
+        This method returns the total costs breakdown including investment costs,
+        operational costs, and total system costs from the optimization results
+        as a pandas DataFrame.
         
         Returns:
-            None: Displays the cost breakdown directly to the output
+            pandas.DataFrame: Cost breakdown with columns:
+                - total costs: Total system cost
+                - total investment costs: Investment cost component
+                - total operation costs: Operational cost component
         
         Raises:
-            Exception: If solve() method has not been successfully executed
+            Exception: If solve() method has not been successfully executed or
+                      if the results directory doesn't exist
         
         Example:
             >>> inv_sys = inosys("input_folder", ref_bus=0)
             >>> inv_sys.solve()
-            >>> inv_sys.resCost()
+            >>> cost_results = inv_sys.resCost()
+            >>> print(cost_results)
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
-            display(pd.read_csv(self.outdir + os.sep + "obj.csv"))
+            return pd.read_csv(self.outdir + os.sep + "obj.csv")
         else:
             print('Need to succesfully run the solve function first.')
             raise
 
     def resWind(self):
         """
-        Display the wind capacity investment results.
+        Get the wind capacity investment results.
         
-        This method displays the optimal wind turbine capacity investments
+        This method returns the optimal wind turbine capacity investments
         including installed capacity and bus locations for each candidate
         wind turbine.
         
         Returns:
-            None: Displays the wind investment results directly to the output
+            pandas.DataFrame: Wind investment results with columns:
+                - Installed Capacity (kW): Optimal capacity for each wind turbine
+                - Bus: Bus number where wind turbine is installed
         
         Raises:
             Exception: If solve() method has not been successfully executed
@@ -831,28 +839,35 @@ class inosys:
         Example:
             >>> inv_sys = inosys("input_folder", ref_bus=0)
             >>> inv_sys.solve(invest=True)
-            >>> inv_sys.resWind()
+            >>> wind_results = inv_sys.resWind()
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
             cwin = pd.read_csv(self.inp_folder + os.sep + "cwin_dist.csv")
-            iwin = pd.read_csv(self.outdir + os.sep + "xw.csv")
-            cwin['Unit'] = (np.arange(1,len(iwin.columns)+1))
-            unit = cwin.loc[:,'Unit']
-            bus = np.array(cwin.loc[:,'bus'])
-            out_win =(((cwin.loc[:,'pmax']*round(iwin.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
-            out_win['Bus'] = bus
-            out_win.style
-            display(out_win)
+            iwin = pd.read_csv(self.outdir + os.sep + "xw.csv", header=None)
+            # Get investment values (skip first row if it's a header)
+            if len(iwin) > 1:
+                inv_values = iwin.iloc[1:, 0].values
+            else:
+                inv_values = iwin.iloc[0:, 0].values
+            # Calculate installed capacity for each unit
+            installed_capacity = cwin['pmax'].values * inv_values
+            # Create result DataFrame
+            out_win = pd.DataFrame({
+                'Installed Capacity (kW)': installed_capacity,
+                'Bus': cwin['bus'].values
+            }, index=range(1, len(cwin) + 1))
+            out_win.index.name = 'Unit'
+            return out_win
         else:
             print('Need to succesfully run the solve function first.')
             raise
 
     def resBat(self):
         """
-        Display the battery capacity investment results.
+        Get the battery capacity investment results.
         
-        This method displays the optimal battery storage capacity investments
+        This method returns the optimal battery storage capacity investments
         including installed capacity and bus locations for each candidate
         battery system.
         
@@ -867,7 +882,7 @@ class inosys:
         Example:
             >>> inv_sys = inosys("input_folder", ref_bus=0)
             >>> inv_sys.solve(invest=True)
-            >>> inv_sys.resBat()
+            >>> battery_results = inv_sys.resBat()
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
@@ -893,9 +908,9 @@ class inosys:
 
     def resSolar(self):
         """
-        Display the solar capacity investment results.
+        Get the solar capacity investment results.
         
-        This method displays the optimal solar PV capacity investments
+        This method returns the optimal solar PV capacity investments
         including installed capacity and bus locations for each candidate
         solar PV system.
         
@@ -910,7 +925,7 @@ class inosys:
         Example:
             >>> inv_sys = inosys("input_folder", ref_bus=0)
             >>> inv_sys.solve(invest=True)
-            >>> inv_sys.resSolar()
+            >>> solar_results = inv_sys.resSolar()
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
@@ -936,9 +951,9 @@ class inosys:
 
     def resConv(self):
         """
-        Display the conventional generator capacity investment results.
+        Get the conventional generator capacity investment results.
         
-        This method displays the optimal conventional generator capacity investments
+        This method returns the optimal conventional generator capacity investments
         including installed capacity and bus locations for each candidate
         conventional generator.
         
@@ -953,7 +968,7 @@ class inosys:
         Example:
             >>> inv_sys = inosys("input_folder", ref_bus=0)
             >>> inv_sys.solve(invest=True)
-            >>> inv_sys.resConv()
+            >>> conv_results = inv_sys.resConv()
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
@@ -988,9 +1003,9 @@ class inosys:
 
     def resCurt(self):
         """
-        Display the curtailment results.
+        Get the curtailment results.
         
-        This method displays the demand shedding and renewable curtailment
+        This method returns the demand shedding and renewable curtailment
         results from the optimization, showing how much load was shed and
         how much renewable energy was curtailed.
         

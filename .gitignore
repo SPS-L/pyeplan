@@ -137,3 +137,6 @@ pyeplan_env/
 # mypy
 .mypy_cache/
 *.sh
+
+# Results folders
+**/results/

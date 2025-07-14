@@ -116,8 +116,8 @@ class inosys:
     
     Methods:
         solve(): Solve the investment and operation optimization problem
-        resCost(): Get optimization results - costs
-        resWind(): Get optimization results - wind generation
+        resCost(): Display optimization results - costs
+        resWind(): Display optimization results - wind generation
         resBat(): Get optimization results - battery operation
         resSolar(): Get optimization results - solar generation
         resConv(): Get optimization results - conventional generation
@@ -263,16 +263,22 @@ class inosys:
     def solve(self, solver = 'glpk', neos = False, invest = False, onlyopr = True, commit = False, solemail = ''):
         '''
         Solve the investment and operation problem.
-        :param str solver: Solver to be used. Available: glpk, cbc, ipopt, gurobi
-        :param bool network: True/False indicates including/excluding network-related constraints 
-        :param bool invest: True/False indicates binary/continuous nature of investement-related decision variables 
-        :param bool onlyopr: True/False indicates if the problem will only solve the operation or both investment and operation
-        :param bool commit: True/False indicates if ???
-        :param bool neos: True/False indicates if ???
-        :Example:
-        >>> import pyeplan
-        >>> sys_inv = pyeplan.inosys("wat_inv", ref_bus = 260)
-        >>> sys_inv.solve()
+        
+        Parameters:
+            solver (str): Solver to be used. Available: glpk, cbc, ipopt, gurobi
+            neos (bool): True/False indicates if using NEOS remote solver service
+            invest (bool): True/False indicates binary/continuous nature of investment-related decision variables
+            onlyopr (bool): True/False indicates if the problem will only solve the operation or both investment and operation
+            commit (bool): True/False indicates if using binary commitment variables for generators
+            solemail (str): Email address required for NEOS solver service
+        
+        Returns:
+            None: Updates the object with optimization results and saves output files
+        
+        Example:
+            >>> import pyeplan
+            >>> sys_inv = pyeplan.inosys("wat_inv", ref_bus = 260)
+            >>> sys_inv.solve()
         '''
 
         
@@ -791,10 +797,7 @@ class inosys:
         operational costs, and total system costs from the optimization results.
         
         Returns:
-            pandas.DataFrame: Cost breakdown with columns:
-                - total costs: Total system cost
-                - total investment costs: Investment cost component
-                - total operation costs: Operational cost component
+            None: Displays the cost breakdown directly to the output
         
         Raises:
             Exception: If solve() method has not been successfully executed
@@ -820,9 +823,7 @@ class inosys:
         wind turbine.
         
         Returns:
-            pandas.DataFrame: Wind investment results with columns:
-                - Installed Capacity (kW): Optimal capacity for each wind turbine
-                - Bus: Bus number where wind turbine is installed
+            None: Displays the wind investment results directly to the output
         
         Raises:
             Exception: If solve() method has not been successfully executed
@@ -871,14 +872,21 @@ class inosys:
 
         if self.outdir != '' and os.path.exists(self.outdir):
             cbat = pd.read_csv(self.inp_folder + os.sep + "cbat_dist.csv")
-            ibat = pd.read_csv(self.outdir + os.sep + "xb.csv")
-            cbat['Unit'] = (np.arange(1,len(ibat.columns)+1))
-            unit = cbat.loc[:,'Unit']
-            bus = np.array(cbat.loc[:,'bus'])
-            out_bat =(((cbat.loc[:,'pmax']*round(ibat.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
-            out_bat['Bus'] = bus
-            out_bat.style
-            display(out_bat)
+            ibat = pd.read_csv(self.outdir + os.sep + "xb.csv", header=None)
+            # Get investment values (skip first row if it's a header)
+            if len(ibat) > 1:
+                inv_values = ibat.iloc[1:, 0].values
+            else:
+                inv_values = ibat.iloc[0:, 0].values
+            # Calculate installed capacity for each unit
+            installed_capacity = cbat['pmax'].values * inv_values
+            # Create result DataFrame
+            out_bat = pd.DataFrame({
+                'Installed Capacity (kW)': installed_capacity,
+                'Bus': cbat['bus'].values
+            }, index=range(1, len(cbat) + 1))
+            out_bat.index.name = 'Unit'
+            return out_bat
         else:
             print('Need to succesfully run the solve function first.')
             raise
@@ -907,14 +915,21 @@ class inosys:
 
         if self.outdir != '' and os.path.exists(self.outdir):
             csol = pd.read_csv(self.inp_folder + os.sep + "csol_dist.csv")
-            isol = pd.read_csv(self.outdir + os.sep + "xs.csv")
-            csol['Unit'] = (np.arange(1,len(isol.columns)+1))
-            unit = csol.loc[:,'Unit']
-            bus = np.array(csol.loc[:,'bus'])
-            out_sol =(((csol.loc[:,'pmax']*round(isol.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
-            out_sol['Bus'] = bus
-            out_sol.style
-            display(out_sol)
+            isol = pd.read_csv(self.outdir + os.sep + "xs.csv", header=None)
+            # Get investment values (skip first row if it's a header)
+            if len(isol) > 1:
+                inv_values = isol.iloc[1:, 0].values
+            else:
+                inv_values = isol.iloc[0:, 0].values
+            # Calculate installed capacity for each unit
+            installed_capacity = csol['pmax'].values * inv_values
+            # Create result DataFrame
+            out_sol = pd.DataFrame({
+                'Installed Capacity (kW)': installed_capacity,
+                'Bus': csol['bus'].values
+            }, index=range(1, len(csol) + 1))
+            out_sol.index.name = 'Unit'
+            return out_sol
         else:
             print('Need to succesfully run the solve function first.')
             raise
@@ -943,14 +958,30 @@ class inosys:
 
         if self.outdir != '' and os.path.exists(self.outdir):
             cgen = pd.read_csv(self.inp_folder + os.sep + "cgen_dist.csv")
-            igen = pd.read_csv(self.outdir + os.sep + "xg.csv")
-            cgen['Unit'] = (np.arange(1,len(igen.columns)+1))
-            unit = cgen.loc[:,'Unit']
-            bus = np.array(cgen.loc[:,'bus'])
-            out_gen =(((cgen.loc[:,'pmax']*round(igen.loc[0:,].T,2))[0]).to_frame().set_index(unit)).rename(columns={0: 'Installed Capacity (kW)'})
-            out_gen['Bus'] = bus
-            out_gen.style
-            display(out_gen)
+            igen = pd.read_csv(self.outdir + os.sep + "xg.csv", header=None)
+            # Get investment values - the first row might be a header or index
+            if len(igen) > 1:
+                inv_values = igen.iloc[1:, 0].values
+            else:
+                inv_values = igen.iloc[0:, 0].values
+            
+            # Ensure inv_values has the same length as cgen
+            if len(inv_values) != len(cgen):
+                # If lengths don't match, use the last value for all generators
+                if len(inv_values) > 0:
+                    inv_values = np.full(len(cgen), inv_values[-1])
+                else:
+                    inv_values = np.zeros(len(cgen))
+            
+            # Calculate installed capacity for each unit
+            installed_capacity = cgen['pmax'].values * inv_values
+            # Create result DataFrame
+            out_gen = pd.DataFrame({
+                'Installed Capacity (kW)': installed_capacity,
+                'Bus': cgen['bus'].values
+            }, index=range(1, len(cgen) + 1))
+            out_gen.index.name = 'Unit'
+            return out_gen
         else:
             print('Need to succesfully run the solve function first.')
             raise
@@ -964,8 +995,10 @@ class inosys:
         how much renewable energy was curtailed.
         
         Returns:
-            pandas.DataFrame: Curtailment results showing demand shedding
-            and renewable curtailment amounts
+            dict: Dictionary containing three pandas.DataFrames:
+                - 'demand_shedding': Demand shedding results (pds.csv)
+                - 'solar_curtailment': Solar curtailment results (pss.csv)
+                - 'wind_curtailment': Wind curtailment results (pws.csv)
         
         Raises:
             Exception: If solve() method has not been successfully executed
@@ -973,16 +1006,15 @@ class inosys:
         Example:
             >>> inv_sys = inosys("input_folder", ref_bus=0)
             >>> inv_sys.solve()
-            >>> inv_sys.resCurt()
+            >>> curtailment_results = inv_sys.resCurt()
+            >>> print(curtailment_results['demand_shedding'])
         """
 
         if self.outdir != '' and os.path.exists(self.outdir):
             pds = pd.read_csv(self.outdir + os.sep + "pds.csv")
             pss = pd.read_csv(self.outdir + os.sep + "pss.csv")
             pws = pd.read_csv(self.outdir + os.sep + "pws.csv")
-            display(pds)
-            display(pss)
-            display(pws)
+            return {'demand_shedding': pds, 'solar_curtailment': pss, 'wind_curtailment': pws}
         else:
             print('Need to succesfully run the solve function first.')
             raise

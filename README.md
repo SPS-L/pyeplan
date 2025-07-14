@@ -26,6 +26,19 @@ PyEPlan is a comprehensive Python library designed for the planning and operatio
 - Python 3.7 or higher
 - pip package manager
 
+### Create Virtual Environment (Recommended)
+
+```bash
+# Create virtual environment
+python -m venv pyeplan_env
+
+# Activate virtual environment
+# On Windows:
+pyeplan_env\Scripts\activate
+# On macOS/Linux:
+source pyeplan_env/bin/activate
+```
+
 ### From PyPI (Recommended)
 
 ```bash
@@ -53,6 +66,57 @@ PyEPlan requires the following Python packages:
 - mplleaflet
 
 These will be automatically installed when installing PyEPlan.
+
+### Optimization Solvers
+
+PyEPlan supports multiple optimization solvers. For basic usage, GLPK (GNU Linear Programming Kit) is recommended:
+
+#### Installing GLPK
+
+**Windows:**
+```bash
+# Using conda (recommended)
+conda install -c defaults -c conda-forge glpk
+
+# Using winget
+winget install GnuWin32.GLPK
+
+# Manual installation
+# Download from https://www.gnu.org/software/glpk/
+```
+
+**macOS:**
+```bash
+# Using Homebrew
+brew install glpk
+
+# Using conda
+conda install -c defaults -c conda-forge glpk
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt-get update
+sudo apt-get install glpk-utils libglpk-dev
+```
+
+**Linux (CentOS/RHEL/Fedora):**
+```bash
+# CentOS/RHEL
+sudo yum install glpk glpk-devel
+
+# Fedora
+sudo dnf install glpk glpk-devel
+```
+
+#### Alternative Solvers
+
+PyEPlan also supports:
+- **CBC**: `conda install -c defaults -c conda-forge coin-or-cbc`
+- **IPOPT**: `conda install -c defaults -c conda-forge ipopt`
+- **Gurobi**: Commercial solver, requires license
+
+For solver-specific installation instructions, see the [Pyomo documentation](https://pyomo.readthedocs.io/en/stable/installation.html).
 
 ## Quick Start
 

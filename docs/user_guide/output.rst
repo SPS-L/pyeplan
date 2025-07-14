@@ -20,6 +20,7 @@ Cost Analysis Outputs
 **Cost Results** (`resCost()` method)
 
 Returns a pandas DataFrame containing:
+
 * Total system cost breakdown
 * Investment costs by technology type
 * Operational costs by component
@@ -27,6 +28,7 @@ Returns a pandas DataFrame containing:
 * Cost per scenario and time period
 
 Example output structure:
+
 .. code-block:: python
 
     costs = inv_sys.resCost()
@@ -54,6 +56,7 @@ Returns detailed wind turbine operation:
 **Solar Generation Results** (`resSolar()` method)
 
 Returns detailed solar PV operation:
+
 * Power generation by solar system
 * Capacity utilization
 * Curtailment levels
@@ -62,6 +65,7 @@ Returns detailed solar PV operation:
 **Conventional Generation Results** (`resConv()` method)
 
 Returns conventional generator operation:
+
 * Power generation by generator
 * Start-up/shut-down decisions
 * Fuel consumption
@@ -70,6 +74,7 @@ Returns conventional generator operation:
 **Battery Storage Results** (`resBat()` method)
 
 Returns battery energy storage operation:
+
 * Charge/discharge power
 * State of charge profiles
 * Energy storage levels
@@ -81,6 +86,7 @@ Curtailment Analysis
 **Curtailment Results** (`resCurt()` method)
 
 Returns information about:
+
 * Load shedding by bus and time period
 * Renewable energy curtailment
 * Shedding costs and penalties
@@ -92,11 +98,13 @@ Network Analysis Outputs
 **Network Configuration Files**
 
 The routing module (rousys) generates:
+
 * `path.png`: Network topology visualization
 * `rou_dist.csv`: Routing distances between connected nodes
 * `elin_dist.csv`: Electrical line parameters and specifications
 
 **Network Parameters**:
+
 * Line resistances and reactances
 * Current carrying capacities
 * Voltage drop calculations
@@ -108,12 +116,14 @@ Data Processing Outputs
 **Representative Days**
 
 The data processing module (datsys) generates:
+
 * Clustered representative days
 * Renewable generation profiles
 * Load demand scenarios
 * Time duration weights for each scenario
 
 **PVGIS Data**:
+
 * Solar irradiance profiles
 * Wind speed data
 * Temperature profiles

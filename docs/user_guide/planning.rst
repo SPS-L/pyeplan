@@ -19,6 +19,7 @@ The unified planning problem is formulated as a mixed-integer linear programming
 Minimize total system cost = Investment costs + Operation costs + Shedding costs
 
 Where:
+
 * Investment costs = Capital costs for generators, storage, and renewables
 * Operation costs = Fuel costs + Variable O&M costs + Grid exchange costs
 * Shedding costs = Demand shedding + Renewable curtailment costs
@@ -88,22 +89,26 @@ Supported Technologies
 =====================
 
 **Conventional Generators**:
+
 * Diesel generators
 * Gas turbines
 * Combined heat and power (CHP) units
 * Grid connection (import/export)
 
 **Renewable Energy Sources**:
+
 * Solar photovoltaic (PV) systems
 * Wind turbines
 * Hybrid renewable systems
 
 **Energy Storage**:
+
 * Battery energy storage systems (BESS)
 * Pumped hydro storage
 * Thermal storage
 
 **Network Components**:
+
 * Distribution lines and cables
 * Transformers
 * Switchgear and protection devices
@@ -112,16 +117,19 @@ Optimization Modes
 ==================
 
 **Investment and Operation Mode** (`invest=True`, `onlyopr=False`):
+
 * Optimizes both investment decisions and operational dispatch
 * Determines optimal technology mix and sizing
 * Provides comprehensive cost analysis
 
 **Operation-Only Mode** (`invest=False`, `onlyopr=True`):
+
 * Optimizes only operational dispatch for existing infrastructure
 * Useful for operational analysis and cost assessment
 * Faster computation for large systems
 
 **Investment-Only Mode** (`invest=True`, `onlyopr=False` with simplified operational constraints):
+
 * Focuses on long-term investment decisions
 * Uses simplified operational representation
 * Suitable for strategic planning
@@ -132,16 +140,19 @@ Solver Options
 PyEPlan supports multiple optimization solvers through Pyomo:
 
 **Open-Source Solvers**:
+
 * GLPK (GNU Linear Programming Kit) - Default
 * CBC (COIN-OR Branch and Cut)
 * IPOPT (Interior Point Optimizer)
 
 **Commercial Solvers**:
+
 * Gurobi
 * CPLEX
 * MOSEK
 
 **Solver Selection Guidelines**:
+
 * GLPK: Good for small to medium problems
 * CBC: Better for larger MILP problems
 * Gurobi/CPLEX: Best performance for large-scale problems
@@ -153,23 +164,27 @@ Results Analysis
 The optimization results provide comprehensive information about:
 
 **Cost Analysis**:
+
 * Total system cost breakdown
 * Investment costs by technology
 * Operational costs by component
 * Levelized cost of energy (LCOE)
 
 **Technology Mix**:
+
 * Optimal installed capacity
 * Technology selection decisions
 * Geographic distribution
 
 **Operational Performance**:
+
 * Hourly dispatch schedules
 * Storage state of charge profiles
 * Network power flows
 * Voltage profiles
 
 **Reliability Metrics**:
+
 * Loss of load probability
 * Energy not served
 * System adequacy indicators
@@ -180,11 +195,13 @@ Integration with Other Modules
 The planning module integrates seamlessly with other PyEPlan modules:
 
 **Data Processing Integration**:
+
 * Uses representative days from datsys module
 * Incorporates renewable generation profiles
 * Handles load demand scenarios
 
 **Network Integration**:
+
 * Incorporates network topology from rousys module
 * Considers line parameters and constraints
 * Optimizes power flow distribution

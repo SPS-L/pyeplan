@@ -25,6 +25,7 @@ The data processing module handles historical weather data extraction and repres
 * `_normalize_column_names()`: Normalize data column names
 
 **Example Usage**:
+
 .. code-block:: python
 
     from pyeplan import datsys
@@ -63,6 +64,7 @@ The routing module performs optimal network design using minimum spanning tree a
 * `distance()`: Calculate geographical distance between two points using Haversine formula
 
 **Example Usage**:
+
 .. code-block:: python
 
     from pyeplan import rousys
@@ -92,9 +94,11 @@ The investment and operation module handles both long-term capacity expansion an
 **Key Methods**:
 
 Optimization:
+
 * `solve()`: Solve the investment and operation optimization problem
 
 Results Analysis:
+
 * `resCost()`: Get optimization results - costs
 * `resWind()`: Get optimization results - wind generation
 * `resBat()`: Get optimization results - battery operation
@@ -103,6 +107,7 @@ Results Analysis:
 * `resCurt()`: Get optimization results - curtailment
 
 **Example Usage**:
+
 .. code-block:: python
 
     from pyeplan import inosys
@@ -176,13 +181,16 @@ PyEPlan uses standardized CSV and Excel formats for input data:
 **Required Input Files**:
 
 Data Processing (datsys):
+
 * `mgpc_dist.xlsx`: Load point and load level data
 
 Routing (rousys):
+
 * `geol_dist.csv`: Geographical coordinates of nodes
 * `cblt_dist.csv`: Cable parameters and specifications
 
 Investment & Operation (inosys):
+
 * `cgen_dist.csv`: Conventional generator candidate data
 * `egen_dist.csv`: Existing conventional generator data
 * `csol_dist.csv`: Solar PV candidate data
@@ -255,6 +263,7 @@ PyEPlan includes comprehensive error handling for:
 * **API Communication**: PVGIS API connection and data retrieval issues
 
 **Example Error Handling**:
+
 .. code-block:: python
 
     try:

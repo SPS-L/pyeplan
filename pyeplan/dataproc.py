@@ -94,32 +94,41 @@ class datsys:
     def __init__(self, inp_folder = '', lat = 0.251148605450955, lon = 32.404833929733,year = 2016, pvcalc = 1, pp = 50, sys_loss = 14, n_clust = 1, pf_c = 1, pf_p = 1, sbase = 1000, raddatabase = None):
         """
         Initialize the data processing system.
-        
-        Parameters:
-            inp_folder (str): Input folder path containing data files (default: '')
-            lat (float): Latitude in decimal degrees (default: 0.251148605450955)
-            lon (float): Longitude in decimal degrees (default: 32.404833929733)
-            year (int): Year for data collection (default: 2016)
-            pvcalc (int): PV calculation method (default: 1)
-                         - 0: Solar radiation calculations only
-                         - 1: Solar radiation and power production calculations
-            pp (float): Nominal power of PV system in kW (default: 50)
-            sys_loss (float): Sum of system losses in % (default: 14)
-            n_clust (int): Number of clusters for time series clustering (default: 1)
-            pf_c (float): Power factor at consumption points (default: 1)
-            pf_p (float): Power factor at production points (default: 1)
-            sbase (float): Base apparent power in kW (default: 1000)
-            raddatabase (str, optional): Radiation database to use. If None, automatically selected based on location.
-                                        Options: 'PVGIS-SARAH2', 'PVGIS-ERA5', 'PVGIS-NSRDB'
-        
-        Required input files:
-            - mgpc_dist.xlsx: Load point and load level data
-        
-        The PVGIS 5.3 tool (https://ec.europa.eu/jrc/en/pvgis) is used to collect
-        renewable production data sets at different locations across the world.
-        The API now supports multiple radiation databases including SARAH2, ERA5, and NSRDB.
-        
-        Example:
+
+        :param inp_folder: Input folder path containing data files (default: '')
+        :type inp_folder: str
+        :param lat: Latitude in decimal degrees (default: 0.251148605450955)
+        :type lat: float
+        :param lon: Longitude in decimal degrees (default: 32.404833929733)
+        :type lon: float
+        :param year: Year for data collection (default: 2016)
+        :type year: int
+        :param pvcalc: PV calculation method (default: 1)
+            - 0: Solar radiation calculations only
+            - 1: Solar radiation and power production calculations
+        :type pvcalc: int
+        :param pp: Nominal power of PV system in kW (default: 50)
+        :type pp: float
+        :param sys_loss: Sum of system losses in % (default: 14)
+        :type sys_loss: float
+        :param n_clust: Number of clusters for time series clustering (default: 1)
+        :type n_clust: int
+        :param pf_c: Power factor at consumption points (default: 1)
+        :type pf_c: float
+        :param pf_p: Power factor at production points (default: 1)
+        :type pf_p: float
+        :param sbase: Base apparent power in kW (default: 1000)
+        :type sbase: float
+        :param raddatabase: Radiation database to use. If None, automatically selected based on location.
+            Options:
+                - 'PVGIS-SARAH3'
+                - 'PVGIS-ERA5'
+                - 'PVGIS-NSRDB'
+        :type raddatabase: str, optional
+
+        :raises ValueError: If PVGIS API returns an error or invalid response
+
+        :example:
             >>> data_sys = datsys("input_folder", lat=0.25, lon=32.40, year=2016)
         """
         
@@ -327,28 +336,21 @@ class datsys:
     def data_extract(self):
         """
         Extract and process time series data from PVGIS.
-        
+
         This method processes the raw data obtained from PVGIS API and converts
         it to local timezone. It extracts PV power, solar irradiance, and wind
         speed data and organizes them into time series format.
-        
-        The method performs the following operations:
-        1. Converts UTC timestamps to local timezone
-        2. Extracts PV power data (if pvcalculation=1)
-        3. Extracts solar irradiance data
-        4. Extracts wind speed data
-        5. Creates power chronology file
-        
-        Output files generated:
-            - power_chrono.csv: PV power time series (if pvcalculation=1)
-        
-        Attributes updated:
-            - data_local_time: Processed data in local timezone
-            - PV_power: PV power time series (if pvcalculation=1)
-            - sol_irrad: Solar irradiance time series
-            - wind_speed: Wind speed time series
-        
-        Example:
+
+        :return: None
+        :rtype: None
+        :raises ValueError: If required columns are missing in PVGIS response
+
+        :ivar data_local_time: Processed data in local timezone
+        :ivar PV_power: PV power time series (if pvcalculation=1)
+        :ivar sol_irrad: Solar irradiance time series
+        :ivar wind_speed: Wind speed time series
+
+        :example:
             >>> data_sys = datsys("input_folder", lat=0.25, lon=32.40)
             >>> data_sys.data_extract()
         """
@@ -483,33 +485,23 @@ class datsys:
     def kmeans_clust(self):
         """
         Perform K-means clustering on time series data.
-        
+
         This method applies K-means clustering algorithm to reduce the dimensionality
         of time series data by grouping similar time periods into clusters. It
         clusters PV power, solar irradiance, and wind speed data separately and
         generates representative scenarios for each cluster.
-        
-        The method performs the following operations:
-        1. Applies K-means clustering to PV power data
-        2. Applies K-means clustering to solar irradiance data
-        3. Applies K-means clustering to wind speed data
-        4. Calculates cluster durations and representative values
-        5. Generates output files for clustered data
-        
-        Output files generated:
-            - psol_dist.csv: Clustered solar power scenarios
-            - qsol_dist.csv: Clustered solar reactive power scenarios
-            - pwin_dist.csv: Clustered wind power scenarios
-            - qwin_dist.csv: Clustered wind reactive power scenarios
-            - dtim_dist.csv: Duration of each cluster
-        
-        The clustering process:
-        - Uses k-means++ initialization for better convergence
-        - Creates n_clust representative scenarios
-        - Calculates cluster centers as representative values
-        - Distributes remaining time periods evenly across clusters
-        
-        Example:
+
+        :return: None
+        :rtype: None
+        :raises ValueError: If output files are missing or have incorrect format
+
+        :ivar psol: Clustered solar power scenarios
+        :ivar qsol: Clustered solar reactive power scenarios
+        :ivar pwin: Clustered wind power scenarios
+        :ivar qwin: Clustered wind reactive power scenarios
+        :ivar dtim: Duration of each cluster
+
+        :example:
             >>> data_sys = datsys("input_folder", n_clust=5)
             >>> data_sys.data_extract()
             >>> data_sys.kmeans_clust()
@@ -566,13 +558,12 @@ class datsys:
     def _validate_output_format(self):
         """
         Validate that the output data format is compatible with investoper.py.
-        
+
         This method checks that all required CSV files are generated with the
         correct format and structure expected by the investment and operation
         optimization module.
-        
-        Raises:
-            ValueError: If any required file is missing or has incorrect format
+
+        :raises ValueError: If any required file is missing or has incorrect format
         """
         required_files = [
             'prep_dist.csv', 'qrep_dist.csv', 'geol_dist.csv',
@@ -615,7 +606,7 @@ class datsys:
     def _normalize_column_names(self):
         """
         Normalize column names from PVGIS 5.3 JSON response to match expected format.
-        
+
         PVGIS 5.3 may return column names with slight variations. This method
         ensures the column names match the expected format for data processing.
         """

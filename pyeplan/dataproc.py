@@ -59,36 +59,36 @@ class datsys:
     It integrates with PVGIS API to fetch solar irradiance and wind speed data
     for any location worldwide.
     
-    Attributes:
-        loc (pd.DataFrame): Load point locations and coordinates
-        pdem (pd.DataFrame): Active power demand profiles
-        prep (pd.DataFrame): Active power renewable generation profiles
-        lat (float): Latitude in decimal degrees (south is negative)
-        lon (float): Longitude in decimal degrees (west is negative)
-        startyear (int): Start year for data collection
-        endyear (int): End year for data collection
-        pvcalculation (int): PV calculation method (0=radiation only, 1=power+radiation)
-        peakpower (float): Nominal power of PV system in kW
-        loss (float): Sum of system losses in %
-        trackingtype (int): Type of sun tracking system
-        optimalinclination (int): Calculate optimum inclination angle (1=yes)
-        optimalangles (int): Calculate optimum inclination and orientation (1=yes)
-        outputformat (str): Output format for PVGIS data
-        browser (int): Output format (0=stream, 1=file)
-        n_clust (int): Number of clusters for time series clustering
-        pf_c (float): Power factor at consumption points
-        pf_p (float): Power factor at production points
-        sbase (float): Base apparent power in kW
-        data_link (str): PVGIS API URL with parameters
-        data (pd.DataFrame): Raw data from PVGIS API
-        local_time_zone (str): Local timezone for the location
-        qrep (pd.DataFrame): Reactive power renewable generation profiles
-        qdem (pd.DataFrame): Reactive power demand profiles
-        inp_folder (str): Input folder path for data files
-    
-    Methods:
-        data_extract(): Extract and process time series data
-        kmeans_clust(): Perform K-means clustering on time series data
+    :ivar loc: Load point locations and coordinates (pd.DataFrame)
+    :ivar pdem: Active power demand profiles (pd.DataFrame)
+    :ivar prep: Active power renewable generation profiles (pd.DataFrame)
+    :ivar lat: Latitude in decimal degrees (south is negative) (float)
+    :ivar lon: Longitude in decimal degrees (west is negative) (float)
+    :ivar startyear: Start year for data collection (int)
+    :ivar endyear: End year for data collection (int)
+    :ivar pvcalculation: PV calculation method (0=radiation only, 1=power+radiation) (int)
+    :ivar peakpower: Nominal power of PV system in kW (float)
+    :ivar loss: Sum of system losses in % (float)
+    :ivar trackingtype: Type of sun tracking system (int)
+    :ivar optimalinclination: Calculate optimum inclination angle (1=yes) (int)
+    :ivar optimalangles: Calculate optimum inclination and orientation (1=yes) (int)
+    :ivar outputformat: Output format for PVGIS data (str)
+    :ivar browser: Output format (0=stream, 1=file) (int)
+    :ivar n_clust: Number of clusters for time series clustering (int)
+    :ivar pf_c: Power factor at consumption points (float)
+    :ivar pf_p: Power factor at production points (float)
+    :ivar sbase: Base apparent power in kW (float)
+    :ivar data_link: PVGIS API URL with parameters (str)
+    :ivar data: Raw data from PVGIS API (pd.DataFrame)
+    :ivar local_time_zone: Local timezone for the location (str)
+    :ivar qrep: Reactive power renewable generation profiles (pd.DataFrame)
+    :ivar qdem: Reactive power demand profiles (pd.DataFrame)
+    :ivar inp_folder: Input folder path for data files (str)
+
+    .. rubric:: Methods
+
+    * :meth:`data_extract` -- Extract and process time series data
+    * :meth:`kmeans_clust` -- Perform K-means clustering on time series data
     """
     
     def __init__(self, inp_folder = '', lat = 0.251148605450955, lon = 32.404833929733,year = 2016, pvcalc = 1, pp = 50, sys_loss = 14, n_clust = 1, pf_c = 1, pf_p = 1, sbase = 1000, raddatabase = None):

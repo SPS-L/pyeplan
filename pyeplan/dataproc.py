@@ -389,7 +389,7 @@ class datsys:
                 
                 # Extract data for the specified year range
                 ext = (self.data['time'] >= str(self.startyear) + '-01-01') & (self.data['time'] <= str(self.endyear) + '-12-31')
-                self.data_local_time = self.data.loc[ext]
+                self.data_local_time = self.data.loc[ext].copy()
                 
                 # Check available columns and extract data accordingly
                 available_cols = self.data_local_time.columns.tolist()
@@ -429,7 +429,7 @@ class datsys:
                 
                 # Extract data for the specified year range
                 ext = (self.data['time'] >= str(self.startyear) + '-01-01') & (self.data['time'] <= str(self.endyear) + '-12-31')
-                self.data_local_time = self.data.loc[ext]
+                self.data_local_time = self.data.loc[ext].copy()
                 
                 # Check available columns and extract data accordingly
                 available_cols = self.data_local_time.columns.tolist()

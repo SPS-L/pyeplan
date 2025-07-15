@@ -41,6 +41,7 @@ import math
 import os
 import shutil
 import folium
+import webbrowser
 
 
 
@@ -217,6 +218,17 @@ class rousys:
             ).add_to(m)
         
         m.save('network_map.html')
+        
+        # Print information about the generated network map
+        file_path = os.path.abspath('network_map.html')
+        print(f"\nNetwork map generated successfully!")
+        print(f"Interactive map saved to: {file_path}")
+        print(f"Opening network map in your default browser...")
+        try:
+            webbrowser.open(f'file://{file_path}')
+        except Exception as e:
+            print(f"Could not open browser automatically: {e}")
+            print(f"Please manually open: {file_path}")
         
 
         rou_dist = pd.DataFrame(sorted(T.edges(data=True)))

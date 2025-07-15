@@ -4,8 +4,25 @@ Release Notes
 
 This section documents the version history and changes in PyEPlan releases.
 
-PyEPlan 1.1.0 (Current Version)
+PyEPlan 1.1.4 (Current Version)
 ===============================
+
+**Performance Release - DataFrame Optimization**
+
+Performance Improvements:
+
+* **Eliminated DataFrame Fragmentation**: Fixed performance warning by pre-allocating DataFrames in Pyomo conversion functions
+* **Optimized Memory Usage**: Improved `pyomo2dfinv`, `pyomo2dfopr`, and `pyomo2dfoprm` functions for better memory efficiency
+* **Enhanced Data Processing Speed**: Reduced DataFrame construction overhead in optimization result extraction
+
+Technical Improvements:
+
+* **Pre-allocated DataFrames**: Replaced dynamic DataFrame growth with proper dimension initialization
+* **Reduced Memory Fragmentation**: Eliminated repeated `df.loc` assignments that caused performance degradation
+* **Improved Scalability**: Better performance for large-scale optimization problems with many variables
+
+PyEPlan 1.1.0
+=============
 
 **Production Release - Enhanced Features**
 

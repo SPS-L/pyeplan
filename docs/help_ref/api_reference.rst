@@ -15,7 +15,7 @@ The data processing module handles historical weather data extraction and repres
 .. autoclass:: pyeplan.datsys
     :members:
     :undoc-members:
-    :show-inheritance:
+    :show-inheritance: 
 
 **Key Methods**:
 

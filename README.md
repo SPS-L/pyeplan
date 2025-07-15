@@ -75,7 +75,7 @@ PyEPlan requires the following Python packages:
 - pyomo
 - timezonefinder
 - scikit-learn
-- mplleaflet
+- folium
 
 These will be automatically installed when installing PyEPlan.
 

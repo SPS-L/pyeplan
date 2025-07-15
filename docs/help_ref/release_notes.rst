@@ -7,19 +7,28 @@ This section documents the version history and changes in PyEPlan releases.
 PyEPlan 1.1.4 (Current Version)
 ===============================
 
-**Performance Release - DataFrame Optimization**
+**Performance Release - DataFrame Optimization & Map Visualization Update**
 
 Performance Improvements:
 
-* **Eliminated DataFrame Fragmentation**: Fixed performance warning by pre-allocating DataFrames in Pyomo conversion functions
+* **Eliminated DataFrame Fragmentation**: Fixed performance warning by replacing `df.loc` assignments with efficient dictionary-based DataFrame construction
 * **Optimized Memory Usage**: Improved `pyomo2dfinv`, `pyomo2dfopr`, and `pyomo2dfoprm` functions for better memory efficiency
 * **Enhanced Data Processing Speed**: Reduced DataFrame construction overhead in optimization result extraction
+* **Resolved Performance Warnings**: Eliminated pandas PerformanceWarning about DataFrame fragmentation
 
 Technical Improvements:
 
-* **Pre-allocated DataFrames**: Replaced dynamic DataFrame growth with proper dimension initialization
+* **Efficient DataFrame Construction**: Replaced pre-allocation and `df.loc` assignments with dictionary-based approach
 * **Reduced Memory Fragmentation**: Eliminated repeated `df.loc` assignments that caused performance degradation
 * **Improved Scalability**: Better performance for large-scale optimization problems with many variables
+* **Cleaner Code Structure**: More readable and maintainable DataFrame construction patterns
+
+Dependency Updates:
+
+* **Replaced mplleaflet with folium**: Updated network visualization from deprecated mplleaflet to actively maintained folium package
+* **Enhanced Interactive Maps**: Improved network topology visualization with modern HTML-based interactive maps
+* **Better Browser Compatibility**: Network maps now work across all modern browsers without compatibility issues
+* **Updated Documentation**: Revised installation guides and dependencies to reflect folium integration
 
 PyEPlan 1.1.0
 =============

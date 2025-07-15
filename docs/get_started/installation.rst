@@ -80,7 +80,7 @@ PyEPlan has the following key dependencies:
 - `timezonefinder <https://github.com/MrMinimal64/timezonefinder>`_ - Geographic timezone calculations
 
 **Optional Dependencies**:
-- `mplleaflet <https://github.com/jwass/mplleaflet>`_ - Interactive map visualization
+- `folium <https://python-visualization.github.io/folium/>`_ - Interactive map visualization
 - `scipy <http://scipy.org/>`_ - Scientific computing (for advanced features)
 
 All dependencies are automatically installed when using pip.

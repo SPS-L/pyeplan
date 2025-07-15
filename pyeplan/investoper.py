@@ -1111,12 +1111,9 @@ def pyomo2dfinv(pyomo_var,index1):
 
         xg_df = pyomo2dfinv(m.xg, m.cg)
     """
-    # Pre-allocate DataFrame with proper dimensions
-    df = pd.DataFrame(index=[0], columns=index1)
-    
-    # Fill DataFrame efficiently
-    for i in index1:
-        df.loc[0,i] = pyomo_var[i].value
+    # Create data dictionary first, then construct DataFrame
+    data = {i: pyomo_var[i].value for i in index1}
+    df = pd.DataFrame([data], index=[0])
     return df
 
 def pyomo2dfopr(pyomo_var,index1,index2,index3,dec=6):
@@ -1146,16 +1143,15 @@ def pyomo2dfopr(pyomo_var,index1,index2,index3,dec=6):
 
         pcg_df = pyomo2dfopr(m.pcg, m.cg, m.tt, m.oo)
     """
-    # Pre-allocate DataFrame with proper dimensions
-    rows = len(index2) * len(index3)
-    cols = len(index1)
-    df = pd.DataFrame(index=range(rows), columns=index1)
-    
-    # Fill DataFrame efficiently
+    # Create data dictionary first, then construct DataFrame
+    data = {}
     for i in index1:
+        data[i] = []
         for j in index2:
             for k in index3:
-                df.loc[j*len(index3)+k,i] = round(pyomo_var[i,j,k].value,dec)
+                data[i].append(round(pyomo_var[i,j,k].value, dec))
+    
+    df = pd.DataFrame(data)
     return df
 
 def pyomo2dfoprm(pyomo_var,index1,index2,index3):
@@ -1183,14 +1179,13 @@ def pyomo2dfoprm(pyomo_var,index1,index2,index3):
 
         vol_df = pyomo2dfoprm(m.vol, m.bb, m.tt, m.oo)
     """
-    # Pre-allocate DataFrame with proper dimensions
-    rows = len(index2) * len(index3)
-    cols = len(index1)
-    df = pd.DataFrame(index=range(rows), columns=index1)
-    
-    # Fill DataFrame efficiently
+    # Create data dictionary first, then construct DataFrame
+    data = {}
     for i in index1:
+        data[i] = []
         for j in index2:
             for k in index3:
-                df.loc[j*len(index3)+k,i] = pyomo_var[i,j,k].value
+                data[i].append(pyomo_var[i,j,k].value)
+    
+    df = pd.DataFrame(data)
     return df

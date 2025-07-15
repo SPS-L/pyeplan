@@ -9,7 +9,7 @@ The module includes:
 - Geographic distance calculations using Haversine formula
 - Minimum spanning tree algorithm for network topology optimization
 - Cable parameter calculations and electrical line specifications
-- Network visualization capabilities with matplotlib and mplleaflet
+- Network visualization capabilities with matplotlib and folium
 
 Classes:
     :class:`rousys`: Main class for routing system operations
@@ -40,7 +40,7 @@ import matplotlib.pyplot as plt
 import math
 import os
 import shutil
-import mplleaflet
+import folium
 
 
 
@@ -153,6 +153,7 @@ class rousys:
         
         Output files generated:
             - path.png: Network topology visualization
+            - network_map.html: Interactive network map visualization
             - rou_dist.csv: Routing distances between connected nodes
             - elin_dist.csv: Electrical line parameters and specifications
         
@@ -160,7 +161,7 @@ class rousys:
         1. Creates a complete graph with all nodes
         2. Calculates distances between all node pairs
         3. Applies minimum spanning tree algorithm
-        4. Generates network visualizations
+        4. Generates network visualizations (static PNG and interactive HTML)
         5. Creates routing and electrical parameter files
         
         .. rubric:: Example
@@ -187,7 +188,35 @@ class rousys:
         pos = nx.get_node_attributes(T,'pos')
         nx.draw_networkx_nodes(T,pos=pos,node_size=10,node_color='red')
         nx.draw_networkx_edges(T,pos=pos,edge_color='blue')
-        # mplleaflet.show(fig=ax.figure)  # Commented out due to matplotlib compatibility issues 
+        
+        # Create interactive map with folium
+        center_lat = sum(pos[node][1] for node in T.nodes()) / len(T.nodes())
+        center_lon = sum(pos[node][0] for node in T.nodes()) / len(T.nodes())
+        
+        m = folium.Map(location=[center_lat, center_lon], zoom_start=12)
+        
+        # Add nodes
+        for node in T.nodes():
+            folium.CircleMarker(
+                location=[pos[node][1], pos[node][0]],
+                radius=5,
+                color='red',
+                fill=True
+            ).add_to(m)
+        
+        # Add edges
+        for edge in T.edges():
+            coords = [
+                [pos[edge[0]][1], pos[edge[0]][0]],
+                [pos[edge[1]][1], pos[edge[1]][0]]
+            ]
+            folium.PolyLine(
+                coords,
+                color='blue',
+                weight=2
+            ).add_to(m)
+        
+        m.save('network_map.html')
         
 
         rou_dist = pd.DataFrame(sorted(T.edges(data=True)))
